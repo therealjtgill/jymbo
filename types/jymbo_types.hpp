@@ -30,12 +30,48 @@ namespace types
       kConstant = 3
    };
 
+   enum class enumDerivativeNodeType_t
+   {
+      kSymbol = 0,
+      kOperator = 1,
+      kReference = 2,
+   };
+
+   enum class enumQueryNodeType_t
+   {
+      kSymbol = 0,
+      kOperator = 1,
+   };
+
    struct symbol_t
    {
       char name[16];
       int uid;
       float val;
       enumSymbolType_t symbolType;
+   };
+
+   struct queryNode_t
+   {
+      union
+      {
+         symbol_t symbol;
+         enumOperatorType_t op;
+      };
+
+      enumQueryNodeType_t nodeType;
+   };
+
+   struct derivativeNode_t
+   {
+      union
+      {
+         symbol_t symbol;
+         enumOperatorType_t op;
+         int q_node_id;
+      };
+
+      enumDerivativeNodeType_t node_type;
    };
 
 }
