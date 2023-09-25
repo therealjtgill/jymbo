@@ -11,7 +11,10 @@ enable_testing()
 
 include( ${CMAKE_SOURCE_DIR}/cmake/functions.cmake )
 
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/types )
+
 add_subdirectory( graph )
 add_subdirectory( operators )
 add_subdirectory( symbols )
 add_subdirectory( tests )
+add_subdirectory( types )

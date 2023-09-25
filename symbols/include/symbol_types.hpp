@@ -6,6 +6,7 @@ namespace jymbo
 
 namespace types
 {
+
    enum class enumSymbolType_t
    {
       kDependent = 0,
