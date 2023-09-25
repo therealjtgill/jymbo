@@ -7,6 +7,10 @@ project(
    VERSION 0.0.1
 )
 
+enable_testing()
+
+include( ${CMAKE_SOURCE_DIR}/cmake/functions.cmake )
+
 add_subdirectory( graph )
 add_subdirectory( operators )
 add_subdirectory( symbols )
