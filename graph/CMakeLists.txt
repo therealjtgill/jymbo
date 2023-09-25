@@ -1,5 +1,6 @@
 set(
    headers
+   include/graph_types.hpp
    include/nary_tree.hpp
 )
 
