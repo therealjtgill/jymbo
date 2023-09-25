@@ -5,7 +5,7 @@ set(
 
 set(
    lib_links
-   jymbosymbols
+   # jymbosymbols
 )
 
 set(
