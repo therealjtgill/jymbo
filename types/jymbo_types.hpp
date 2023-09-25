@@ -1,3 +1,5 @@
+#include "nary_tree.hpp"
+
 namespace jymbo
 {
 
