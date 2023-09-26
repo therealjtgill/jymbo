@@ -11,37 +11,37 @@ namespace jymbo
    {
       switch(op)
       {
-         case kEqual:
+         case jymbo::types::enumOperatorType_t::kEqual:
             return std::string("equal");
             break;
-         case kAddition:
+         case jymbo::types::enumOperatorType_t::kAddition:
             return std::string("add");
             break;
-         case kSubtraction:
+         case jymbo::types::enumOperatorType_t::kSubtraction:
             return std::string("subtract");
             break;
-         case kMultiplication:
+         case jymbo::types::enumOperatorType_t::kMultiplication:
             return std::string("mult");
             break;
-         case kDivision:
+         case jymbo::types::enumOperatorType_t::kDivision:
             return std::string("divide");
             break;
-         case kNaturalLog:
+         case jymbo::types::enumOperatorType_t::kNaturalLog:
             return std::string("ln");
             break;
-         case kNaturalExponent:
+         case jymbo::types::enumOperatorType_t::kNaturalExponent:
             return std::string("exp");
             break;
-         case kSine:
+         case jymbo::types::enumOperatorType_t::kSine:
             return std::string("sin");
             break;
-         case kCosine:
+         case jymbo::types::enumOperatorType_t::kCosine:
             return std::string("cos");
             break;
-         case kTangent:
+         case jymbo::types::enumOperatorType_t::kTangent:
             return std::string("tan");
             break;
-         case kPower:
+         case jymbo::types::enumOperatorType_t::kPower:
             return std::string("pow");
             break;
       }
