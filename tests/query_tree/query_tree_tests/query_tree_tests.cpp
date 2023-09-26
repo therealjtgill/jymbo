@@ -1,5 +1,7 @@
 #include "jymbo_types.hpp"
 
+#include "polynomial_query_tree.hpp"
+
 #define CATCH_CONFIG_MAIN
 
 #include "catch.hpp"
@@ -11,4 +13,9 @@ TEST_CASE( "query_tree_instantiation", "[QueryTree]" )
    q_node.op = jymbo::types::enumOperatorType_t::kEqual;
    jymbo::types::QueryTree q_tree(q_node);
    REQUIRE( true );
+}
+
+TEST_CASE( "quadratic tree instantiation", "[QueryTree]")
+{
+
 }

@@ -6,6 +6,7 @@ set(
 set(
    lib_links
    jymbotypes
+   jymbotestutils
 )
 
 set(
