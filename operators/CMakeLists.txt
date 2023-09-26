@@ -1,37 +1,42 @@
-# set(
-#    headers
-#    include/operator_types.hpp
-# )
+set(
+   headers
+   include/operators.hpp
+)
 
-# set(
-#    sources
-# )
+set(
+   sources
+)
 
-# set(
-#    target
-#    jymbooperators
-# )
+set(
+   target
+   jymbooperators
+)
 
-# include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/include )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/include )
 
-# add_library(
-#    ${target}
-#    SHARED
-#    ${sources}
-#    ${headers}
-# )
+add_library(
+   ${target}
+   SHARED
+   ${sources}
+   ${headers}
+)
 
-# target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Wno-unused-function -Werror)
+target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Wno-unused-function -Werror)
 
-# target_include_directories(
-#    ${target}
-#    PUBLIC
-#    ${CMAKE_CURRENT_SOURCE_DIR}/include
-# )
+target_include_directories(
+   ${target}
+   PUBLIC
+   ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
-# set_target_properties(
-#    ${target}
-#    PROPERTIES
-#    LINKER_LANGUAGE
-#    CXX
-# )
+set_target_properties(
+   ${target}
+   PROPERTIES
+   LINKER_LANGUAGE
+   CXX
+)
+
+target_link_libraries(
+   ${target}
+   jymbotypes
+)
