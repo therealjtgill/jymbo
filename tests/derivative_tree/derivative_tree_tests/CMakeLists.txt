@@ -1,6 +1,6 @@
 set(
    target
-   operator_tests
+   derivative_tree_tests
 )
 
 set(

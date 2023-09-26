@@ -16,22 +16,22 @@ class NAryTree
    public:
       typedef graph::types::dl_node_t<Metadata_T, NumChildren> MetaNode_T;
 
-      NAryTree(const Metadata_T & meta)
+      NAryTree(const Metadata_T & root_meta)
       {
          static_assert(
             NumChildren >= 2, "N-ary tree requires two or more children per node"
          );
-         setRoot(meta);
+         setRoot(root_meta);
       }
 
-      NAryTree(unsigned int reserve_size, const Metadata_T & meta)
+      NAryTree(unsigned int reserve_size, const Metadata_T & root_meta)
       {
          static_assert(
             NumChildren >= 2, "N-ary tree requires two or more children per node"
          );
          nodes_.reserve(reserve_size);
 
-         MetaNode_T root_node = makeDefaultNode(meta);
+         MetaNode_T root_node = makeDefaultNode(root_meta);
 
          nodes_.push_back(root_node);
       }

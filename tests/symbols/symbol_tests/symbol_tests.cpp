@@ -1,4 +1,4 @@
-#include "symbol_types.hpp"
+#include "jymbo_types.hpp"
 
 #define CATCH_CONFIG_MAIN
 

@@ -1,6 +1,6 @@
 set(
    target
-   operator_tests
+   query_tree_tests
 )
 
 set(
