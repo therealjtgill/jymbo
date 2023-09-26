@@ -36,3 +36,9 @@ set_target_properties(
    LINKER_LANGUAGE
    CXX
 )
+
+target_link_libraries(
+   ${target}
+   jymbooperators
+   jymbotypes
+)
