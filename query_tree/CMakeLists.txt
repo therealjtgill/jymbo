@@ -1,15 +1,16 @@
 set(
    headers
-   include/operators.hpp
+   include/query_tree.hpp
 )
 
 set(
    sources
+   src/query_tree.cpp
 )
 
 set(
    target
-   jymbooperators
+   jymboquerytree
 )
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/include )
@@ -38,5 +39,6 @@ set_target_properties(
 
 target_link_libraries(
    ${target}
+   jymbooperators
    jymbotypes
 )

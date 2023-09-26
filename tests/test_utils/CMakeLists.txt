@@ -1,18 +1,19 @@
 set(
    headers
-   include/operators.hpp
+   polynomial_query_tree.hpp
 )
 
 set(
    sources
+   polynomial_query_tree.cpp
 )
 
 set(
    target
-   jymbooperators
+   jymbotestutils
 )
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/include )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 add_library(
    ${target}
@@ -26,7 +27,7 @@ target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Wno-unused-fu
 target_include_directories(
    ${target}
    PUBLIC
-   ${CMAKE_CURRENT_SOURCE_DIR}/include
+   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 set_target_properties(

@@ -13,6 +13,7 @@ include( ${CMAKE_SOURCE_DIR}/cmake/functions.cmake )
 
 add_subdirectory( graph )
 add_subdirectory( operators )
+add_subdirectory( query_tree )
 add_subdirectory( symbols )
 add_subdirectory( tests )
 add_subdirectory( types )

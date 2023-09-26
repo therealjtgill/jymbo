@@ -5,7 +5,9 @@ set(
 
 set(
    lib_links
+   jymboquerytree
    jymbotypes
+   jymbotestutils
 )
 
 set(

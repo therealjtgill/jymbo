@@ -1,3 +1,6 @@
+#ifndef JYMBO_TYPES_HEADER
+#define JYMBO_TYPES_HEADER
+
 #include "nary_tree.hpp"
 
 namespace jymbo
@@ -19,7 +22,6 @@ namespace types
       kCosine = 8,
       kTangent = 9,
       kPower = 10,
-      kExponentiation = 11,
    };
 
    enum class enumSymbolType_t
@@ -80,3 +82,5 @@ namespace types
 }
 
 }
+
+#endif

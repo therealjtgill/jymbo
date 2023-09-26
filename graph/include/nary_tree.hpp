@@ -237,17 +237,9 @@ class NAryTree
          std::vector<int> frontier;
          frontier.reserve(size());
 
-         int parent_node_id = -1;
-         for (int i = 0; i < nodes_.size(); ++i)
-         {
-            if (nodes_[i].parentNodeId == -1)
-            {
-               parent_node_id = i;
-               break;
-            }
-         }
+         const int root_node_id = getRootId();
 
-         frontier.push_back(parent_node_id);
+         frontier.push_back(root_node_id);
 
          while (!frontier.empty())
          {
