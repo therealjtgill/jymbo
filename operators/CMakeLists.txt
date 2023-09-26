@@ -5,6 +5,7 @@ set(
 
 set(
    sources
+   src/operators.cpp
 )
 
 set(
