@@ -19,7 +19,6 @@ namespace types
       kCosine = 8,
       kTangent = 9,
       kPower = 10,
-      kExponentiation = 11,
    };
 
    enum class enumSymbolType_t
