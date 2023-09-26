@@ -83,6 +83,8 @@ namespace test_utils
       {
          addAPowXN(counter, plus_node_id, x_sym_node, q_tree);
          plus_node_id = q_tree.addChild(plus_node_id, plus_op_node);
+
+         counter -= 1;
       }
 
       q_tree[plus_node_id] = a0_sym_node;
