@@ -1,3 +1,6 @@
+#ifndef JYMBO_TYPES_HEADER
+#define JYMBO_TYPES_HEADER
+
 #include "nary_tree.hpp"
 
 namespace jymbo
@@ -79,3 +82,5 @@ namespace types
 }
 
 }
+
+#endif
