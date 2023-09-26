@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cstdio>
 
+#include <iostream>
+
 namespace test_utils
 {
    void addAPowXN(
@@ -28,15 +30,16 @@ namespace test_utils
       an_sym_node.symbol.symbolType = jymbo::types::enumSymbolType_t::kParameter;
 
       jymbo::types::queryNode_t n_sym_node;
-      an_sym_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-      std::snprintf(an_sym_node.symbol.name, 16, "%i", n);
-      an_sym_node.symbol.uid = 3 * n + 5;
-      an_sym_node.symbol.val = static_cast<float>(n);
-      an_sym_node.symbol.symbolType = jymbo::types::enumSymbolType_t::kParameter;
+      n_sym_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
+      std::snprintf(n_sym_node.symbol.name, 16, "%i", n);
+      n_sym_node.symbol.uid = 3 * n + 5;
+      n_sym_node.symbol.val = static_cast<float>(n);
+      n_sym_node.symbol.symbolType = jymbo::types::enumSymbolType_t::kParameter;
 
       int mult_node_id = q_tree.addChild(plus_node_id, mult_op_node);
       q_tree.addChild(mult_node_id, an_sym_node);
       int pow_node_id = q_tree.addChild(mult_node_id, pow_op_node);
+
       q_tree.addChild(pow_node_id, indep_sym_node);
       q_tree.addChild(pow_node_id, n_sym_node);
    }
@@ -72,15 +75,16 @@ namespace test_utils
       x_sym_node.symbol.symbolType = jymbo::types::enumSymbolType_t::kIndependent;
 
       jymbo::types::queryNode_t a0_sym_node;
-      x_sym_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-      std::snprintf(x_sym_node.symbol.name, 16, "a0");
-      x_sym_node.symbol.uid = 1;
-      x_sym_node.symbol.val = 0.f;
-      x_sym_node.symbol.symbolType = jymbo::types::enumSymbolType_t::kParameter;
+      a0_sym_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
+      std::snprintf(a0_sym_node.symbol.name, 16, "a0");
+      a0_sym_node.symbol.uid = 1;
+      a0_sym_node.symbol.val = 0.f;
+      a0_sym_node.symbol.symbolType = jymbo::types::enumSymbolType_t::kParameter;
 
       int counter = n;
       while(counter > 0)
       {
+         std::cout << "counter: " << counter << "\n";
          addAPowXN(counter, plus_node_id, x_sym_node, q_tree);
          plus_node_id = q_tree.addChild(plus_node_id, plus_op_node);
 
