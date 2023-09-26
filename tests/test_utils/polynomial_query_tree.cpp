@@ -84,7 +84,6 @@ namespace test_utils
       int counter = n;
       while(counter > 0)
       {
-         std::cout << "counter: " << counter << "\n";
          addAPowXN(counter, plus_node_id, x_sym_node, q_tree);
          plus_node_id = q_tree.addChild(plus_node_id, plus_op_node);
 
