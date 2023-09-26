@@ -69,7 +69,7 @@ namespace test_utils
 
       jymbo::types::queryNode_t x_sym_node;
       x_sym_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-      std::snprintf(x_sym_node.symbol.name, 16, "x%i", n);
+      std::snprintf(x_sym_node.symbol.name, 16, "x");
       x_sym_node.symbol.uid = 1;
       x_sym_node.symbol.val = 0.f;
       x_sym_node.symbol.symbolType = jymbo::types::enumSymbolType_t::kIndependent;
