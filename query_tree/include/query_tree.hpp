@@ -2,7 +2,9 @@
 #define QUERY_TREE_HEADER
 
 #include "jymbo_types.hpp"
+
 #include <iostream>
+#include <string>
 
 namespace query_tree
 {
@@ -22,6 +24,7 @@ namespace query_tree
 
    void print(const jymbo::types::QueryTree & q_tree)
    {
+      std::string out_string;
       std::vector<printFrontierNode_t> frontier;
 
       frontier.reserve(q_tree.size());
@@ -40,6 +43,16 @@ namespace query_tree
 
          const jymbo::types::QueryTree::MetaNode_T & tree_node = \
             q_tree.getNode(frontier_node.nodeId);
+
+         if (tree_node.meta.nodeType == jymbo::types::enumQueryNodeType_t::kOperator)
+         {
+            out_string += 
+         }
+
+         if (tree_node.childNodeIds[0] == -1 || tree_node.childNodeIds[1] == -1)
+         {
+            continue;
+         }
 
          printFrontierNode_t left_frontier_node;
          left_frontier_node.childId = 0;
