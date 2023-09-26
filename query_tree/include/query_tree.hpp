@@ -41,7 +41,6 @@ namespace query_tree
 
       while (!frontier.empty())
       {
-         std::cout << "frontier size: " << frontier.size() << "\n";
          const printFrontierNode_t frontier_node = frontier.back();
          frontier.pop_back();
 
