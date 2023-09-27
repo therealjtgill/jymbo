@@ -54,8 +54,10 @@ namespace jymbo
       // Ok, so the operator referenced by d_node_id in the d_tree is addition.
       // This means that I need to replace the node at d_node_id with nodes
       // that are equivalent to the derivative of the addition operator.
-
-      
+      (void)d_node_id;
+      (void)q_tree;
+      (void)d_tree;
+      return {{-1, -1}};
    }
 
 }
