@@ -5,7 +5,7 @@ set(
 
 set(
    sources
-   src/symbols.hpp
+   src/symbols.cpp
 )
 
 set(
@@ -35,4 +35,9 @@ set_target_properties(
    PROPERTIES
    LINKER_LANGUAGE
    CXX
+)
+
+target_link_libraries(
+   ${target}
+   jymbotypes
 )
