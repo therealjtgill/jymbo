@@ -1,5 +1,7 @@
 #include "operators.hpp"
 
+#include <iostream>
+
 namespace jymbo
 {
 
@@ -54,10 +56,45 @@ namespace jymbo
       // Ok, so the operator referenced by d_node_id in the d_tree is addition.
       // This means that I need to replace the node at d_node_id with nodes
       // that are equivalent to the derivative of the addition operator.
-      (void)d_node_id;
-      (void)q_tree;
-      (void)d_tree;
-      return {{-1, -1}};
+
+      jymbo::types::derivativeNode_t add_op;
+      add_op.node_type = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      add_op.op = jymbo::types::enumOperatorType_t::kAddition;
+
+      if (d_tree[d_node_id].node_type != jymbo::types::enumDerivativeNodeType_t::kReference)
+      {
+         std::cout << "Derivative tree at node id " << d_node_id << " should reference the q-tree, but it doesn't\n";
+         return {{-1, -1}};
+      }
+
+      const auto & q_node_ref = q_tree.getNode(d_tree[d_node_id].q_node_id);
+
+      const int q_left_child_id = q_node_ref.childNodeIds[0];
+      const int q_right_child_id = q_node_ref.childNodeIds[1];
+
+      if (q_left_child_id == -1 || q_right_child_id == -1)
+      {
+         return {{-1, -1}};
+      }
+
+      d_tree[d_node_id] = add_op;
+
+      jymbo::types::derivativeNode_t left_q_ref;
+      left_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
+      left_q_ref.q_node_id = q_left_child_id;
+
+      jymbo::types::derivativeNode_t right_q_ref;
+      right_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
+      right_q_ref.q_node_id = q_right_child_id;
+
+      jymbo::types::derivativeFrontierNodes d_frontier = {
+         {
+            d_tree.addChild(d_node_id, left_q_ref),
+            d_tree.addChild(d_node_id, right_q_ref),
+         }
+      };
+
+      return d_frontier;
    }
 
 }
