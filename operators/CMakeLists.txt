@@ -5,6 +5,7 @@ set(
 
 set(
    sources
+   src/operators.cpp
 )
 
 set(
@@ -38,5 +39,6 @@ set_target_properties(
 
 target_link_libraries(
    ${target}
+   jymbosymbols
    jymbotypes
 )

@@ -1,16 +1,16 @@
 set(
    headers
-   include/symbols.hpp
+   include/derivative_tree.hpp
 )
 
 set(
    sources
-   src/symbols.cpp
+   src/derivative_tree.cpp
 )
 
 set(
    target
-   jymbosymbols
+   jymboderivativetree
 )
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/include )
