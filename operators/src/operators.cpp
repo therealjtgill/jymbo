@@ -1,4 +1,5 @@
 #include "operators.hpp"
+#include "symbols.hpp"
 
 #include <iostream>
 
@@ -221,7 +222,67 @@ namespace jymbo
          return {{-1, -1}};
       }
 
-      static_assert(false);
+      const auto & q_node_ref = q_tree.getNode(d_tree[d_node_id].q_node_id);
+
+      const int q_left_child_id = q_node_ref.childNodeIds[0];
+      const int q_right_child_id = q_node_ref.childNodeIds[1];
+
+      if (q_left_child_id == -1 || q_right_child_id == -1)
+      {
+         return {{-1, -1}};
+      }
+
+      d_tree[d_node_id] = subtract_op;
+
+      jymbo::types::derivativeNode_t left_q_ref;
+      left_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
+      left_q_ref.q_node_id = q_left_child_id;
+
+      jymbo::types::derivativeNode_t right_q_ref;
+      right_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
+      right_q_ref.q_node_id = q_right_child_id;
+
+      const int left_mult_op_id = d_tree.addChild(d_node_id, mult_op);
+      const int right_mult_op_id = d_tree.addChild(d_node_id, mult_op);
+
+      jymbo::types::derivativeNode_t pow_op;
+      pow_op.node_type = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      pow_op.op = jymbo::types::enumOperatorType_t::kPower;
+
+      const int left_frontier_node_id = d_tree.addChild(left_mult_op_id, left_q_ref);
+      const int left_pow_op_id = d_tree.addChild(left_mult_op_id, pow_op);
+
+      jymbo::types::derivativeNode_t neg_1_param;
+      neg_1_param.node_type = jymbo::types::enumDerivativeNodeType_t::kSymbol;
+      neg_1_param.symbol = jymbo::initializeSymbol(
+         "-1", -1, -1.f, jymbo::types::enumSymbolType_t::kParameter
+      );
+
+      jymbo::types::derivativeNode_t neg_2_param;
+      neg_2_param.node_type = jymbo::types::enumDerivativeNodeType_t::kSymbol;
+      neg_2_param.symbol = jymbo::initializeSymbol(
+         "-2", -2, -2.f, jymbo::types::enumSymbolType_t::kParameter
+      );
+
+      d_tree.addChild(left_pow_op_id, right_q_ref);
+      d_tree.addChild(left_pow_op_id, neg_1_param);
+
+      d_tree.addChild(right_mult_op_id, left_q_ref);
+      const int second_right_mult_op_id = d_tree.addChild(right_mult_op_id, mult_op);
+      const int second_pow_op_id = d_tree.addChild(second_right_mult_op_id, pow_op);
+      d_tree.addChild(second_pow_op_id, left_q_ref);
+      d_tree.addChild(second_pow_op_id, neg_2_param);
+
+      const int right_frontier_node_id = d_tree.addChild(right_mult_op_id, left_q_ref);
+
+      jymbo::types::derivativeFrontierNodes d_frontier = {
+         {
+            left_frontier_node_id,
+            right_frontier_node_id
+         }
+      };
+
+      return d_frontier;
    }
 
    jymbo::types::derivativeFrontierNodes powerDerivativeSubtree(
