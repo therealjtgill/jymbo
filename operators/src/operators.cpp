@@ -78,8 +78,6 @@ namespace jymbo
          return {{-1, -1}};
       }
 
-      d_tree[d_node_id] = add_op;
-
       jymbo::types::derivativeNode_t left_q_ref;
       left_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
       left_q_ref.q_node_id = q_left_child_id;
@@ -87,6 +85,8 @@ namespace jymbo
       jymbo::types::derivativeNode_t right_q_ref;
       right_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
       right_q_ref.q_node_id = q_right_child_id;
+
+      d_tree[d_node_id] = add_op;
 
       jymbo::types::derivativeFrontierNodes d_frontier = {
          {
@@ -124,8 +124,6 @@ namespace jymbo
          return {{-1, -1}};
       }
 
-      d_tree[d_node_id] = subtract_op;
-
       jymbo::types::derivativeNode_t left_q_ref;
       left_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
       left_q_ref.q_node_id = q_left_child_id;
@@ -133,6 +131,8 @@ namespace jymbo
       jymbo::types::derivativeNode_t right_q_ref;
       right_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
       right_q_ref.q_node_id = q_right_child_id;
+
+      d_tree[d_node_id] = subtract_op;
 
       jymbo::types::derivativeFrontierNodes d_frontier = {
          {
@@ -174,8 +174,6 @@ namespace jymbo
          return {{-1, -1}};
       }
 
-      d_tree[d_node_id] = add_op;
-
       jymbo::types::derivativeNode_t left_q_ref;
       left_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
       left_q_ref.q_node_id = q_left_child_id;
@@ -183,6 +181,8 @@ namespace jymbo
       jymbo::types::derivativeNode_t right_q_ref;
       right_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
       right_q_ref.q_node_id = q_right_child_id;
+
+      d_tree[d_node_id] = add_op;
 
       const int left_mult_id = d_tree.addChild(d_node_id, mult_op);
       const int left_frontier_node_id = d_tree.addChild(left_mult_id, left_q_ref);
@@ -232,8 +232,6 @@ namespace jymbo
          return {{-1, -1}};
       }
 
-      d_tree[d_node_id] = subtract_op;
-
       jymbo::types::derivativeNode_t left_q_ref;
       left_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
       left_q_ref.q_node_id = q_left_child_id;
@@ -241,6 +239,8 @@ namespace jymbo
       jymbo::types::derivativeNode_t right_q_ref;
       right_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
       right_q_ref.q_node_id = q_right_child_id;
+
+      d_tree[d_node_id] = subtract_op;
 
       const int left_mult_op_id = d_tree.addChild(d_node_id, mult_op);
       const int right_mult_op_id = d_tree.addChild(d_node_id, mult_op);
@@ -291,7 +291,70 @@ namespace jymbo
       jymbo::types::DerivativeTree & d_tree
    )
    {
-      static_assert(false);
+      jymbo::types::derivativeNode_t subtract_op;
+      subtract_op.node_type = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      subtract_op.op = jymbo::types::enumOperatorType_t::kSubtraction;
+
+      jymbo::types::derivativeNode_t mult_op;
+      mult_op.node_type = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      mult_op.op = jymbo::types::enumOperatorType_t::kMultiplication;
+
+      jymbo::types::derivativeNode_t pow_op;
+      pow_op.node_type = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      pow_op.op = jymbo::types::enumOperatorType_t::kPower;
+
+      if (d_tree[d_node_id].node_type != jymbo::types::enumDerivativeNodeType_t::kReference)
+      {
+         std::cout << "Derivative tree at node id " << d_node_id << " should reference the q-tree, but it doesn't\n";
+         return {{-1, -1}};
+      }
+
+      const auto & q_node_ref = q_tree.getNode(d_tree[d_node_id].q_node_id);
+
+      const int q_left_child_id = q_node_ref.childNodeIds[0];
+      const int q_right_child_id = q_node_ref.childNodeIds[1];
+
+      if (q_left_child_id == -1 || q_right_child_id == -1)
+      {
+         return {{-1, -1}};
+      }
+
+      jymbo::types::derivativeNode_t left_q_ref;
+      left_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
+      left_q_ref.q_node_id = q_left_child_id;
+
+      jymbo::types::derivativeNode_t right_q_ref;
+      right_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
+      right_q_ref.q_node_id = q_right_child_id;
+
+      d_tree[d_node_id] = mult_op;
+
+      const int left_mult_node_id = d_tree.addChild(d_node_id, mult_op);
+      const int left_frontier_node_id = d_tree.addChild(d_node_id, left_q_ref);
+
+      d_tree.addChild(left_mult_node_id, right_q_ref);
+      const int pow_node_id = d_tree.addChild(left_mult_node_id, pow_op);
+
+      d_tree.addChild(pow_node_id, left_q_ref);
+      const int subtract_node_id = d_tree.addChild(pow_node_id, subtract_op);
+
+      jymbo::types::derivativeNode_t pos_1_param;
+      pos_1_param.node_type = jymbo::types::enumDerivativeNodeType_t::kSymbol;
+      pos_1_param.symbol = jymbo::initializeSymbol(
+         "1", 1, 1.f, jymbo::types::enumSymbolType_t::kParameter
+      );
+
+      d_tree.addChild(subtract_node_id, right_q_ref);
+      d_tree.addChild(subtract_node_id, pos_1_param);
+
+      jymbo::types::derivativeFrontierNodes d_frontier = {
+         {
+            left_frontier_node_id,
+            -1
+         }
+      };
+
+      return d_frontier;
    }
 
 }
