@@ -15,6 +15,30 @@ namespace jymbo
       jymbo::types::DerivativeTree & d_tree
    );
 
+   jymbo::types::derivativeFrontierNodes subtractionDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   );
+
+   jymbo::types::derivativeFrontierNodes multiplicationDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   );
+
+   jymbo::types::derivativeFrontierNodes divisionDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   );
+
+   jymbo::types::derivativeFrontierNodes powerDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   );
+
    class Derivatizer
    {
 

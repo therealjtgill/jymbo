@@ -97,4 +97,77 @@ namespace jymbo
       return d_frontier;
    }
 
+   jymbo::types::derivativeFrontierNodes subtractionDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+      jymbo::types::derivativeNode_t subtract_op;
+      subtract_op.node_type = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      subtract_op.op = jymbo::types::enumOperatorType_t::kSubtraction;
+
+      if (d_tree[d_node_id].node_type != jymbo::types::enumDerivativeNodeType_t::kReference)
+      {
+         std::cout << "Derivative tree at node id " << d_node_id << " should reference the q-tree, but it doesn't\n";
+         return {{-1, -1}};
+      }
+
+      const auto & q_node_ref = q_tree.getNode(d_tree[d_node_id].q_node_id);
+
+      const int q_left_child_id = q_node_ref.childNodeIds[0];
+      const int q_right_child_id = q_node_ref.childNodeIds[1];
+
+      if (q_left_child_id == -1 || q_right_child_id == -1)
+      {
+         return {{-1, -1}};
+      }
+
+      d_tree[d_node_id] = subtract_op;
+
+      jymbo::types::derivativeNode_t left_q_ref;
+      left_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
+      left_q_ref.q_node_id = q_left_child_id;
+
+      jymbo::types::derivativeNode_t right_q_ref;
+      right_q_ref.node_type = jymbo::types::enumDerivativeNodeType_t::kReference;
+      right_q_ref.q_node_id = q_right_child_id;
+
+      jymbo::types::derivativeFrontierNodes d_frontier = {
+         {
+            d_tree.addChild(d_node_id, left_q_ref),
+            d_tree.addChild(d_node_id, right_q_ref),
+         }
+      };
+
+      return d_frontier;
+   }
+
+   jymbo::types::derivativeFrontierNodes multiplicationDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+
+   }
+
+   jymbo::types::derivativeFrontierNodes divisionDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+
+   }
+
+   jymbo::types::derivativeFrontierNodes powerDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+
+   }
+
 }
