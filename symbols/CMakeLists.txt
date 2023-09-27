@@ -1,37 +1,38 @@
-# set(
-#    headers
-#    include/symbol_types.hpp
-# )
+set(
+   headers
+   include/symbols.hpp
+)
 
-# set(
-#    sources
-# )
+set(
+   sources
+   src/symbols.hpp
+)
 
-# set(
-#    target
-#    jymbosymbols
-# )
+set(
+   target
+   jymbosymbols
+)
 
-# include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/include )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/include )
 
-# add_library(
-#    ${target}
-#    SHARED
-#    ${sources}
-#    ${headers}
-# )
+add_library(
+   ${target}
+   SHARED
+   ${sources}
+   ${headers}
+)
 
-# target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Wno-unused-function -Werror)
+target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Wno-unused-function -Werror)
 
-# target_include_directories(
-#    ${target}
-#    PUBLIC
-#    ${CMAKE_CURRENT_SOURCE_DIR}/include
-# )
+target_include_directories(
+   ${target}
+   PUBLIC
+   ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
-# set_target_properties(
-#    ${target}
-#    PROPERTIES
-#    LINKER_LANGUAGE
-#    CXX
-# )
+set_target_properties(
+   ${target}
+   PROPERTIES
+   LINKER_LANGUAGE
+   CXX
+)
