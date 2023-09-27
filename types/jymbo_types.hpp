@@ -79,6 +79,11 @@ namespace types
    typedef graph::NAryTree<queryNode_t, 2> QueryTree;
 
    typedef graph::NAryTree<derivativeNode_t, 2> DerivativeTree;
+
+   struct derivativeFrontierNodes
+   {
+      int nodeIdsToDerivatize[2];
+   };
 }
 
 }

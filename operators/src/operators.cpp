@@ -2,6 +2,7 @@
 
 namespace jymbo
 {
+
    std::string operatorToString(const types::enumOperatorType_t op)
    {
       switch(op)
@@ -43,4 +44,18 @@ namespace jymbo
 
       return std::string("no-operation-found");
    }
+
+   jymbo::types::derivativeFrontierNodes additionDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+      // Ok, so the operator referenced by d_node_id in the d_tree is addition.
+      // This means that I need to replace the node at d_node_id with nodes
+      // that are equivalent to the derivative of the addition operator.
+
+      
+   }
+
 }
