@@ -29,7 +29,8 @@ namespace types
       kDependent = 0,
       kIndependent = 1,
       kParameter = 2,
-      kConstant = 3
+      kConstant = 3,
+      kNull = 4,
    };
 
    enum class enumDerivativeNodeType_t
