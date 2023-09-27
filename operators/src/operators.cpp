@@ -154,8 +154,8 @@ namespace jymbo
       add_op.op = jymbo::types::enumOperatorType_t::kAddition;
 
       jymbo::types::derivativeNode_t mult_op;
-      add_op.node_type = jymbo::types::enumDerivativeNodeType_t::kOperator;
-      add_op.op = jymbo::types::enumOperatorType_t::kMultiplication;
+      mult_op.node_type = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      mult_op.op = jymbo::types::enumOperatorType_t::kMultiplication;
 
       if (d_tree[d_node_id].node_type != jymbo::types::enumDerivativeNodeType_t::kReference)
       {
@@ -207,7 +207,21 @@ namespace jymbo
       jymbo::types::DerivativeTree & d_tree
    )
    {
+      jymbo::types::derivativeNode_t mult_op;
+      mult_op.node_type = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      mult_op.op = jymbo::types::enumOperatorType_t::kMultiplication;
 
+      jymbo::types::derivativeNode_t subtract_op;
+      subtract_op.node_type = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      subtract_op.op = jymbo::types::enumOperatorType_t::kSubtraction;
+
+      if (d_tree[d_node_id].node_type != jymbo::types::enumDerivativeNodeType_t::kReference)
+      {
+         std::cout << "Derivative tree at node id " << d_node_id << " should reference the q-tree, but it doesn't\n";
+         return {{-1, -1}};
+      }
+
+      static_assert(false);
    }
 
    jymbo::types::derivativeFrontierNodes powerDerivativeSubtree(
@@ -216,7 +230,7 @@ namespace jymbo
       jymbo::types::DerivativeTree & d_tree
    )
    {
-
+      static_assert(false);
    }
 
 }
