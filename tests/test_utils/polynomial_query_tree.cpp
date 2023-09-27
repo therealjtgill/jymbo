@@ -32,10 +32,6 @@ namespace test_utils
       n_sym_node.symbol = jymbo::initializeSymbol(
          "", n, 3 * n + 5, static_cast<float>(n), jymbo::types::enumSymbolType_t::kParameter
       );
-      // std::snprintf(n_sym_node.symbol.name, 16, "%i", n);
-      // n_sym_node.symbol.uid = 3 * n + 5;
-      // n_sym_node.symbol.val = static_cast<float>(n);
-      // n_sym_node.symbol.symbolType = jymbo::types::enumSymbolType_t::kParameter;
 
       int mult_node_id = q_tree.addChild(plus_node_id, mult_op_node);
       q_tree.addChild(mult_node_id, an_sym_node);
@@ -56,10 +52,6 @@ namespace test_utils
 
       jymbo::types::queryNode_t q_y_node;
       q_y_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-      // std::snprintf(q_y_node.symbol.name, 16, "y");
-      // q_y_node.symbol.symbolType = jymbo::types::enumSymbolType_t::kDependent;
-      // q_y_node.symbol.uid = 0;
-      // q_y_node.symbol.val = 0.f;
       q_y_node.symbol = jymbo::initializeSymbol(
          "y", 0, 0.f, jymbo::types::enumSymbolType_t::kDependent
       );
@@ -74,10 +66,6 @@ namespace test_utils
 
       jymbo::types::queryNode_t x_sym_node;
       x_sym_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-      // std::snprintf(x_sym_node.symbol.name, 16, "x");
-      // x_sym_node.symbol.uid = 1;
-      // x_sym_node.symbol.val = 0.f;
-      // x_sym_node.symbol.symbolType = jymbo::types::enumSymbolType_t::kIndependent;
       x_sym_node.symbol = jymbo::initializeSymbol(
          "x", 1, 0.f, jymbo::types::enumSymbolType_t::kIndependent
       );
@@ -87,10 +75,6 @@ namespace test_utils
       a0_sym_node.symbol = jymbo::initializeSymbol(
          "a0", 2, 0.f, jymbo::types::enumSymbolType_t::kParameter
       );
-      // std::snprintf(a0_sym_node.symbol.name, 16, "a0");
-      // a0_sym_node.symbol.uid = 1;
-      // a0_sym_node.symbol.val = 0.f;
-      // a0_sym_node.symbol.symbolType = jymbo::types::enumSymbolType_t::kParameter;
 
       int counter = n;
       while(counter > 0)
