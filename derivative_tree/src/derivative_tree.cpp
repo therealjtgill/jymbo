@@ -78,6 +78,19 @@ namespace derivative_tree
       std::cout << out_string << "\n";
    }
 
+   std::string queryNodeToString(const jymbo::types::queryNode_t & q_node)
+   {
+      switch(q_node.nodeType)
+      {
+         case jymbo::types::enumQueryNodeType_t::kOperator:
+            return jymbo::operatorToString(q_node.op);
+         case jymbo::types::enumQueryNodeType_t::kSymbol:
+            return std::string(q_node.symbol.name);
+      }
+
+      return std::string("cannot print query node");
+   }
+
    void derivatize(
       const jymbo::types::QueryTree & q_tree,
       jymbo::types::DerivativeTree & d_tree
@@ -123,6 +136,9 @@ namespace derivative_tree
             std::cout << "tried to expand a node that isn't a reference to the q-tree\n";
             return;
          }
+
+         std::cout << "taking the derivative of query node ID " << d_tree[d_node_id].qNodeId << "\n";
+         std::cout << "\twith type: " << queryNodeToString(q_tree[d_node.qNodeId]) << "\n";
 
          jymbo::types::derivativeFrontierNodes child_nodes = derivatizer(
             d_node_id, q_tree, d_tree

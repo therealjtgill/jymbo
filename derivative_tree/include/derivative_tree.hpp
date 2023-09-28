@@ -24,6 +24,8 @@ namespace derivative_tree
 
    void print(const jymbo::types::DerivativeTree & d_tree);
 
+   std::string queryNodeToString(const jymbo::types::queryNode_t & q_node);
+
    void derivatize(
       const jymbo::types::QueryTree & q_tree,
       jymbo::types::DerivativeTree & d_tree
