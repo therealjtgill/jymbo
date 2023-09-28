@@ -23,7 +23,7 @@ namespace derivative_tree
       int childId;
    };
 
-   void print(const jymbo::types::DerivativeTree & q_tree);
+   void print(const jymbo::types::DerivativeTree & d_tree);
 }
 
 #endif

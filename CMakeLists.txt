@@ -11,6 +11,9 @@ enable_testing()
 
 include( ${CMAKE_SOURCE_DIR}/cmake/functions.cmake )
 
+set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin")
+
 add_subdirectory( derivative_tree )
 add_subdirectory( graph )
 add_subdirectory( operators )

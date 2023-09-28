@@ -3,14 +3,14 @@
 namespace derivative_tree
 {
    
-   void print(const jymbo::types::DerivativeTree & q_tree)
+   void print(const jymbo::types::DerivativeTree & d_tree)
    {
       std::string out_string;
       std::vector<printFrontierNode_t> frontier;
 
-      frontier.reserve(q_tree.size());
+      frontier.reserve(d_tree.size());
 
-      const int root_node_id = q_tree.getRootId();
+      const int root_node_id = d_tree.getRootId();
 
       printFrontierNode_t root_frontier_node;
       root_frontier_node.childId = 0;
@@ -25,7 +25,7 @@ namespace derivative_tree
          frontier.pop_back();
 
          const jymbo::types::DerivativeTree::MetaNode_T & tree_node = \
-            q_tree.getNode(frontier_node.nodeId);
+            d_tree.getNode(frontier_node.nodeId);
 
          if (frontier_node.childId == 1)
          {
@@ -41,7 +41,7 @@ namespace derivative_tree
          {
             out_string += std::string(tree_node.meta.symbol.name);
          }
-         else if (tree_node.meta.nodeType == jymbo::types::enumDerivativeNodeType_t::kSymbol)
+         else if (tree_node.meta.nodeType == jymbo::types::enumDerivativeNodeType_t::kReference)
          {
             out_string += std::string("Q");
             out_string += std::to_string(tree_node.meta.qNodeId);
