@@ -85,6 +85,8 @@ namespace derivative_tree
    {
       std::vector<int> frontier;
 
+      jymbo::Derivatizer derivatizer;
+
       frontier.reserve(q_tree.size());
 
       jymbo::types::derivativeNode_t d_root_node;
@@ -122,7 +124,17 @@ namespace derivative_tree
             return;
          }
 
-         
+         jymbo::types::derivativeFrontierNodes child_nodes = derivatizer(
+            d_node_id, q_tree, d_tree
+         );
+
+         for (int i = 0; i < 2; ++i)
+         {
+            if (child_nodes.nodeIdsToDerivatize[i] >= 0)
+            {
+               frontier.push_back(child_nodes.nodeIdsToDerivatize[i]);
+            }
+         }
       }
    }
 }
