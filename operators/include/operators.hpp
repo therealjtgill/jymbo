@@ -10,6 +10,13 @@ namespace jymbo
 {
    std::string operatorToString(const types::enumOperatorType_t op);
 
+   // For taking the derivatives of all symbol types.
+   jymbo::types::derivativeFrontierNodes trivialDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   );
+
    jymbo::types::derivativeFrontierNodes additionDerivativeSubtree(
       const int d_node_id,
       const jymbo::types::QueryTree & q_tree,
@@ -42,7 +49,7 @@ namespace jymbo
 
    class Derivatizer
    {
-      void operator()(
+      jymbo::types::derivativeFrontierNodes operator()(
          const int d_node_id,
          const jymbo::types::QueryTree & q_tree,
          jymbo::types::DerivativeTree & d_tree

@@ -48,6 +48,40 @@ namespace jymbo
       return std::string("no-operation-found");
    }
 
+   jymbo::types::derivativeFrontierNodes trivialDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+      const auto & q_node = q_tree[d_tree[d_node_id].qNodeId];
+
+      auto & d_node = d_tree[d_node_id];
+      d_node.nodeType = jymbo::types::enumDerivativeNodeType_t::kSymbol;
+
+      switch(q_node.symbol.symbolType)
+      {
+         case jymbo::types::enumSymbolType_t::kDependent:
+            d_node.symbol = jymbo::initializeSymbol(
+               "y'", 0, 0.f, jymbo::types::enumSymbolType_t::kDependent
+            );
+            break;
+         case jymbo::types::enumSymbolType_t::kConstant:
+         case jymbo::types::enumSymbolType_t::kIndependent:
+         case jymbo::types::enumSymbolType_t::kParameter:
+            d_node.symbol = jymbo::initializeSymbol(
+               "0", -1, 0.f, jymbo::types::enumSymbolType_t::kConstant
+            );
+            break;
+         case jymbo::types::enumSymbolType_t::kNull:
+            d_node.symbol = jymbo::initializeSymbol(
+               "NULL", -1, 0.f, jymbo::types::enumSymbolType_t::kNull
+            );
+      }
+
+      return {{-1, -1}};
+   }
+
    jymbo::types::derivativeFrontierNodes additionDerivativeSubtree(
       const int d_node_id,
       const jymbo::types::QueryTree & q_tree,
@@ -255,13 +289,13 @@ namespace jymbo
       jymbo::types::derivativeNode_t neg_1_param;
       neg_1_param.nodeType = jymbo::types::enumDerivativeNodeType_t::kSymbol;
       neg_1_param.symbol = jymbo::initializeSymbol(
-         "-1", -1, -1.f, jymbo::types::enumSymbolType_t::kParameter
+         "-1", -1, -1.f, jymbo::types::enumSymbolType_t::kConstant
       );
 
       jymbo::types::derivativeNode_t neg_2_param;
       neg_2_param.nodeType = jymbo::types::enumDerivativeNodeType_t::kSymbol;
       neg_2_param.symbol = jymbo::initializeSymbol(
-         "-2", -2, -2.f, jymbo::types::enumSymbolType_t::kParameter
+         "-2", -2, -2.f, jymbo::types::enumSymbolType_t::kConstant
       );
 
       d_tree.addChild(left_pow_op_id, right_q_ref);
@@ -341,7 +375,7 @@ namespace jymbo
       jymbo::types::derivativeNode_t pos_1_param;
       pos_1_param.nodeType = jymbo::types::enumDerivativeNodeType_t::kSymbol;
       pos_1_param.symbol = jymbo::initializeSymbol(
-         "1", 1, 1.f, jymbo::types::enumSymbolType_t::kParameter
+         "1", 1, 1.f, jymbo::types::enumSymbolType_t::kConstant
       );
 
       d_tree.addChild(subtract_node_id, right_q_ref);
@@ -357,7 +391,7 @@ namespace jymbo
       return d_frontier;
    }
 
-   void Derivatizer::operator()(
+   jymbo::types::derivativeFrontierNodes Derivatizer::operator()(
       const int d_node_id,
       const jymbo::types::QueryTree & q_tree,
       jymbo::types::DerivativeTree & d_tree
@@ -370,21 +404,13 @@ namespace jymbo
       switch(q_node.nodeType)
       {
          case jymbo::types::enumQueryNodeType_t::kOperator:
-            operator_derivatives_.at(q_node.op)(d_node_id, q_tree, d_tree);
-            break;
+            return operator_derivatives_.at(q_node.op)(
+               d_node_id, q_tree, d_tree
+            );
          case jymbo::types::enumQueryNodeType_t::kSymbol:
-            switch(q_node.symbol.symbolType)
-            {
-               case jymbo::types::enumSymbolType_t::kDependent:
-                  // calculate the derivative of the dependent variable...
-                  break;
-               case jymbo::types::enumSymbolType_t::kConstant:
-               case jymbo::types::enumSymbolType_t::kIndependent:
-               case jymbo::types::enumSymbolType_t::kNull:
-               case jymbo::types::enumSymbolType_t::kParameter:
-                  break;
-            }
-            break;
+            return trivialDerivativeSubtree(
+               d_node_id, q_tree, d_tree
+            );
       }
    }
 }
