@@ -357,4 +357,34 @@ namespace jymbo
       return d_frontier;
    }
 
+   void Derivatizer::operator()(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   ) const
+   {
+      const int q_node_id = d_tree[d_node_id].qNodeId;
+
+      const auto q_node = q_tree[q_node_id];
+
+      switch(q_node.nodeType)
+      {
+         case jymbo::types::enumQueryNodeType_t::kOperator:
+            operator_derivatives_.at(q_node.op)(d_node_id, q_tree, d_tree);
+            break;
+         case jymbo::types::enumQueryNodeType_t::kSymbol:
+            switch(q_node.symbol.symbolType)
+            {
+               case jymbo::types::enumSymbolType_t::kDependent:
+                  // calculate the derivative of the dependent variable...
+                  break;
+               case jymbo::types::enumSymbolType_t::kConstant:
+               case jymbo::types::enumSymbolType_t::kIndependent:
+               case jymbo::types::enumSymbolType_t::kNull:
+               case jymbo::types::enumSymbolType_t::kParameter:
+                  break;
+            }
+            break;
+      }
+   }
 }
