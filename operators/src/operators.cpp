@@ -224,7 +224,7 @@ namespace jymbo
 
       const int right_mult_id = d_tree.addChild(d_node_id, mult_op);
       d_tree.addChild(right_mult_id, left_q_ref);
-      const int right_frontier_node_id = d_tree.addChild(left_mult_id, right_q_ref);
+      const int right_frontier_node_id = d_tree.addChild(right_mult_id, right_q_ref);
 
       jymbo::types::derivativeFrontierNodes d_frontier = {
          {
