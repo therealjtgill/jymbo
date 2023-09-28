@@ -117,3 +117,24 @@ TEST_CASE( "take derivative of linear equation", "[DerivativeTree]" )
 
    derivative_tree::print(d_tree);
 }
+
+TEST_CASE( "take derivative of quadratic equation", "[DerivativeTree]" )
+{
+   jymbo::types::queryNode_t q_node;
+   q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
+   q_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::QueryTree q_tree(q_node);
+
+   test_utils::polynomialQueryTree(2, q_tree);
+
+   query_tree::print(q_tree);
+
+   jymbo::types::derivativeNode_t d_node;
+   d_node.nodeType = jymbo::types::enumDerivativeNodeType_t::kOperator;
+   d_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::DerivativeTree d_tree(d_node);
+
+   derivative_tree::derivatize(q_tree, d_tree);
+
+   derivative_tree::print(d_tree);
+}
