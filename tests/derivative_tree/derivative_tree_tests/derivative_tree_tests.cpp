@@ -60,4 +60,13 @@ TEST_CASE( "take derivative of linear equation", "[DerivativeTree]" )
    test_utils::polynomialQueryTree(1, q_tree);
 
    query_tree::print(q_tree);
+
+   jymbo::types::derivativeNode_t d_node;
+   d_node.nodeType = jymbo::types::enumDerivativeNodeType_t::kOperator;
+   d_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::DerivativeTree d_tree(d_node);
+
+   derivative_tree::derivatize(q_tree, d_tree);
+
+   derivative_tree::print(d_tree);
 }
