@@ -71,10 +71,10 @@ namespace types
       {
          symbol_t symbol;
          enumOperatorType_t op;
-         int q_node_id;
+         int qNodeId;
       };
 
-      enumDerivativeNodeType_t node_type;
+      enumDerivativeNodeType_t nodeType;
    };
 
    typedef graph::NAryTree<queryNode_t, 2> QueryTree;

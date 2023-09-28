@@ -11,6 +11,7 @@ enable_testing()
 
 include( ${CMAKE_SOURCE_DIR}/cmake/functions.cmake )
 
+add_subdirectory( derivative_tree )
 add_subdirectory( graph )
 add_subdirectory( operators )
 add_subdirectory( query_tree )
