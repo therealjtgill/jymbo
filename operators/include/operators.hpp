@@ -49,11 +49,12 @@ namespace jymbo
 
    class Derivatizer
    {
-      jymbo::types::derivativeFrontierNodes operator()(
-         const int d_node_id,
-         const jymbo::types::QueryTree & q_tree,
-         jymbo::types::DerivativeTree & d_tree
-      ) const;
+      public:
+         jymbo::types::derivativeFrontierNodes operator()(
+            const int d_node_id,
+            const jymbo::types::QueryTree & q_tree,
+            jymbo::types::DerivativeTree & d_tree
+         ) const;
 
       private:
          typedef jymbo::types::derivativeFrontierNodes (*op_derivative_fn)(
