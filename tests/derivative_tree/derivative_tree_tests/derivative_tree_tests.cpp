@@ -1,5 +1,7 @@
 #include "jymbo_types.hpp"
 #include "derivative_tree.hpp"
+#include "polynomial_query_tree.hpp"
+#include "query_tree.hpp"
 #include "symbols.hpp"
 
 #define CATCH_CONFIG_MAIN
@@ -46,4 +48,16 @@ TEST_CASE( "print derivative tree", "[DerivativeTree]" )
    d_tree.addChild(divide_op_id, right_query_ref);
 
    derivative_tree::print(d_tree);
+}
+
+TEST_CASE( "take derivative of linear equation", "[DerivativeTree]" )
+{
+   jymbo::types::queryNode_t q_node;
+   q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
+   q_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::QueryTree q_tree(q_node);
+
+   test_utils::polynomialQueryTree(1, q_tree);
+
+   query_tree::print(q_tree);
 }
