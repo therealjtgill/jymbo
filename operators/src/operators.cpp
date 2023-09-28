@@ -412,5 +412,7 @@ namespace jymbo
                d_node_id, q_tree, d_tree
             );
       }
+
+      return {{-1,-1}};
    }
 }
