@@ -153,4 +153,13 @@ namespace derivative_tree
          }
       }
    }
+
+   void convertToQTree(
+      const jymbo::types::DerivativeTree & d_tree,
+      jymbo::types::QueryTree & q_tree
+   )
+   {
+      
+   }
+
 }
