@@ -36,4 +36,9 @@ namespace jymbo
 
       return temp_symbol;
    }
+
+   std::string symbolToString(const types::symbol_t sym)
+   {
+      return std::string(sym.name);
+   }
 }

@@ -1,4 +1,6 @@
 #include "derivative_tree.hpp"
+#include "operators.hpp"
+#include "symbols.hpp"
 
 namespace derivative_tree
 {
@@ -74,5 +76,81 @@ namespace derivative_tree
       }
 
       std::cout << out_string << "\n";
+   }
+
+   std::string queryNodeToString(const jymbo::types::queryNode_t & q_node)
+   {
+      switch(q_node.nodeType)
+      {
+         case jymbo::types::enumQueryNodeType_t::kOperator:
+            return jymbo::operatorToString(q_node.op);
+         case jymbo::types::enumQueryNodeType_t::kSymbol:
+            return std::string(q_node.symbol.name);
+      }
+
+      return std::string("cannot print query node");
+   }
+
+   void derivatize(
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+      std::vector<int> frontier;
+
+      jymbo::Derivatizer derivatizer;
+
+      frontier.reserve(q_tree.size());
+
+      jymbo::types::derivativeNode_t d_root_node;
+      d_root_node.nodeType = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      d_root_node.op = jymbo::types::enumOperatorType_t::kEqual;
+
+      jymbo::types::derivativeNode_t d_y_node;
+      d_y_node.nodeType = jymbo::types::enumDerivativeNodeType_t::kSymbol;
+      d_y_node.symbol = jymbo::initializeSymbol(
+         "y'", 0, 0.f, jymbo::types::enumSymbolType_t::kDependent
+      );
+
+      jymbo::types::derivativeNode_t rhs_q_ref_node;
+      rhs_q_ref_node.nodeType = jymbo::types::enumDerivativeNodeType_t::kReference;
+      rhs_q_ref_node.qNodeId = q_tree.getNode(q_tree.getRootId()).childNodeIds[1];
+
+      d_tree.setRoot(d_root_node);
+      const int d_root_id = d_tree.getRootId();
+
+      d_tree.addChild(d_root_id, d_y_node);
+      const int d_frontier_id = d_tree.addChild(d_root_id, rhs_q_ref_node);
+
+      frontier.push_back(d_frontier_id);
+
+      while(frontier.size() > 0)
+      {
+         const int d_node_id = frontier.back();
+         frontier.pop_back();
+
+         const auto d_node = d_tree[d_node_id];
+
+         if (d_node.nodeType != jymbo::types::enumDerivativeNodeType_t::kReference)
+         {
+            std::cout << "tried to expand a node that isn't a reference to the q-tree\n";
+            return;
+         }
+
+         std::cout << "taking the derivative of query node ID " << d_tree[d_node_id].qNodeId << "\n";
+         std::cout << "\twith type: " << queryNodeToString(q_tree[d_node.qNodeId]) << "\n";
+
+         jymbo::types::derivativeFrontierNodes child_nodes = derivatizer(
+            d_node_id, q_tree, d_tree
+         );
+
+         for (int i = 0; i < 2; ++i)
+         {
+            if (child_nodes.nodeIdsToDerivatize[i] >= 0)
+            {
+               frontier.push_back(child_nodes.nodeIdsToDerivatize[i]);
+            }
+         }
+      }
    }
 }

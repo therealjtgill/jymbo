@@ -3,6 +3,8 @@
 
 #include "jymbo_types.hpp"
 
+#include <string>
+
 namespace jymbo
 {
    jymbo::types::symbol_t initializeSymbol(
@@ -19,6 +21,8 @@ namespace jymbo
       const float val,
       const jymbo::types::enumSymbolType_t symbol_type
    );
+
+   std::string symbolToString(const types::symbol_t sym);
 }
 
 #endif
