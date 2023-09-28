@@ -5,6 +5,8 @@ set(
 
 set(
    lib_links
+   jymboderivativetree
+   jymbosymbols
    jymbotypes
 )
 
