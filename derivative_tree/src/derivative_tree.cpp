@@ -202,7 +202,7 @@ namespace derivative_tree
             for (int i = 0; i < 2; ++i)
             {
                frontier.push_back(
-                  {src_node.childNodeIds[i], dest_node_id}
+                  {src_node.childNodeIds[i], new_dest_parent_id}
                );
             }
          }
