@@ -174,12 +174,14 @@ namespace derivative_tree
             (src_node.childNodeIds[1] != -1)
          )
          {
-            for (int i = 0; i < 2; ++i)
-            {
-               frontier.push_back(
-                  {src_node.childNodeIds[i], dest_node_id}
-               );
-            }
+            // Have to do it in this order, otherwise the children have their
+            // positions swapped in the output tree.
+            frontier.push_back(
+               {src_node.childNodeIds[1], dest_node_id}
+            );
+            frontier.push_back(
+               {src_node.childNodeIds[0], dest_node_id}
+            );
          }
       }
 
@@ -199,12 +201,14 @@ namespace derivative_tree
             (src_node.childNodeIds[1] != -1)
          )
          {
-            for (int i = 0; i < 2; ++i)
-            {
-               frontier.push_back(
-                  {src_node.childNodeIds[i], new_dest_parent_id}
-               );
-            }
+            // Have to do it in this order, otherwise the children have their
+            // positions swapped in the output tree.
+            frontier.push_back(
+               {src_node.childNodeIds[1], new_dest_parent_id}
+            );
+            frontier.push_back(
+               {src_node.childNodeIds[0], new_dest_parent_id}
+            );
          }
       }
    }
@@ -242,12 +246,14 @@ namespace derivative_tree
 
       q_tree_out.setRoot(convertDNodeToQNode(d_tree[d_tree.getRootId()]));
 
-      for (int i = 0; i < 2; ++i)
-      {
-         frontier.push_back(
-            {d_tree.getRoot().childNodeIds[i], q_tree_out.getRootId()}
-         );
-      }
+      // Have to do it in this order, otherwise the children have their
+      // positions swapped in the output tree.
+      frontier.push_back(
+         {d_tree.getRoot().childNodeIds[1], q_tree_out.getRootId()}
+      );
+      frontier.push_back(
+         {d_tree.getRoot().childNodeIds[0], q_tree_out.getRootId()}
+      );
 
       while (frontier.size() > 0)
       {
@@ -278,17 +284,16 @@ namespace derivative_tree
                (d_tree_node.childNodeIds[1] != -1)
             )
             {
-               // Add the children of the d-tree and the destination parent
-               // node as new nodes on the frontier. Node, node, node, node.
-               for (int i = 0 ; i < 2; ++i)
-               {
-                  frontier.push_back(
-                     {d_tree_node.childNodeIds[i], new_dest_parent_node_id}
-                  );
-               }
+               // Have to do it in this order, otherwise the children have their
+               // positions swapped in the output tree.
+               frontier.push_back(
+                  {d_tree_node.childNodeIds[1], new_dest_parent_node_id}
+               );
+               frontier.push_back(
+                  {d_tree_node.childNodeIds[0], new_dest_parent_node_id}
+               );
             }
          }
-
       }
    }
 
