@@ -67,7 +67,6 @@ namespace jymbo
             );
             break;
          case jymbo::types::enumSymbolType_t::kConstant:
-         case jymbo::types::enumSymbolType_t::kIndependent:
          case jymbo::types::enumSymbolType_t::kParameter:
             d_node.symbol = jymbo::initializeSymbol(
                "0", -1, 0.f, jymbo::types::enumSymbolType_t::kConstant
@@ -77,6 +76,12 @@ namespace jymbo
             d_node.symbol = jymbo::initializeSymbol(
                "NULL", -1, 0.f, jymbo::types::enumSymbolType_t::kNull
             );
+            break;
+         case jymbo::types::enumSymbolType_t::kIndependent:
+            d_node.symbol = jymbo::initializeSymbol(
+               "1", 1, 0.f, jymbo::types::enumSymbolType_t::kConstant
+            );
+            break;
       }
 
       return {{-1, -1}};
