@@ -154,6 +154,61 @@ namespace derivative_tree
       }
    }
 
+   void copyQTreeToQTree(
+      const int src_node_id,
+      const int dest_node_id,
+      const jymbo::types::QueryTree & src_q_tree,
+      jymbo::types::QueryTree & dest_q_tree
+   )
+   {
+      std::vector<copyFrontierNode_t> frontier;
+      frontier.reserve(src_q_tree.size());
+
+      dest_q_tree[dest_node_id] = src_q_tree[src_node_id];
+
+      {
+         const auto & src_node = src_q_tree.getNode(src_node_id);
+
+         if (
+            (src_node.childNodeIds[0] != -1) &&
+            (src_node.childNodeIds[1] != -1)
+         )
+         {
+            for (int i = 0; i < 2; ++i)
+            {
+               frontier.push_back(
+                  {src_node.childNodeIds[i], dest_node_id}
+               );
+            }
+         }
+      }
+
+      while (frontier.size() > 0)
+      {
+         const auto transplant = frontier.back();
+         frontier.pop_back();
+
+         const int new_dest_parent_id = dest_q_tree.addChild(
+            transplant.destParentNodeId, src_q_tree[transplant.srcNodeId]
+         );
+
+         const auto & src_node = src_q_tree.getNode(transplant.srcNodeId);
+
+         if (
+            (src_node.childNodeIds[0] != -1) &&
+            (src_node.childNodeIds[1] != -1)
+         )
+         {
+            for (int i = 0; i < 2; ++i)
+            {
+               frontier.push_back(
+                  {src_node.childNodeIds[i], dest_node_id}
+               );
+            }
+         }
+      }
+   }
+
    jymbo::types::queryNode_t convertDNodeToQNode(
       const jymbo::types::derivativeNode_t d_node
    )
@@ -170,30 +225,6 @@ namespace derivative_tree
          q_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
          q_node.symbol = d_node.symbol;
       }
-
-      // switch(d_node.nodeType)
-      // {
-      //    case jymbo::types::enumDerivativeNodeType_t::kOperator:
-      //       q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-      //       q_node.op = d_node.op;
-      //       break;
-      //    case jymbo::types::enumDerivativeNodeType_t::kReference:
-      //       q_node.nodeType = q_tree_in[d_node.qNodeId].nodeType;
-      //       switch(q_node.nodeType)
-      //       {
-      //          case jymbo::types::enumQueryNodeType_t::kOperator:
-      //             q_node.op = q_tree_in[d_node.qNodeId].op;
-      //             break;
-      //          case jymbo::types::enumQueryNodeType_t::kSymbol:
-      //             q_node.symbol = q_tree_in[d_node.qNodeId].symbol;
-      //             break;
-      //       }
-      //       break;
-      //    case jymbo::types::enumDerivativeNodeType_t::kSymbol:
-      //       q_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-      //       q_node.symbol = d_node.symbol;
-      //       break;
-      // }
 
       return q_node;
    }
