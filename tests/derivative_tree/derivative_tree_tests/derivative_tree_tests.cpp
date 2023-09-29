@@ -115,7 +115,17 @@ TEST_CASE( "take derivative of linear equation", "[DerivativeTree]" )
 
    derivative_tree::derivatize(q_tree, d_tree);
 
+   std::cout << "raw linear derivative tree\n";
    derivative_tree::print(d_tree);
+
+   jymbo::types::QueryTree derivative_of_q_tree(q_node);
+
+   derivative_tree::convertToQTree(d_tree, q_tree, derivative_of_q_tree);
+
+   std::cout << "givin you the parsed linear derivative tree\n";
+   query_tree::print(derivative_of_q_tree);
+
+   std::cout << "\n\n";
 }
 
 TEST_CASE( "take derivative of quadratic equation", "[DerivativeTree]" )
@@ -136,5 +146,13 @@ TEST_CASE( "take derivative of quadratic equation", "[DerivativeTree]" )
 
    derivative_tree::derivatize(q_tree, d_tree);
 
+   std::cout << "givin you the raw d tree\n";
    derivative_tree::print(d_tree);
+
+   jymbo::types::QueryTree derivative_of_q_tree(q_node);
+
+   derivative_tree::convertToQTree(d_tree, q_tree, derivative_of_q_tree);
+
+   std::cout << "givin you the parsed d tree\n";
+   query_tree::print(derivative_of_q_tree);
 }

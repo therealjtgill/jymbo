@@ -39,6 +39,5 @@ set_target_properties(
 
 target_link_libraries(
    ${target}
-   jymbosymbols
-   jymbotypes
+   jymbo
 )
