@@ -155,35 +155,45 @@ namespace derivative_tree
    }
 
    jymbo::types::queryNode_t convertDNodeToQNode(
-      const jymbo::types::derivativeNode_t d_node,
-      const jymbo::types::QueryTree & q_tree_in
+      const jymbo::types::derivativeNode_t d_node
    )
    {
       jymbo::types::queryNode_t q_node;
 
-      switch(d_node.nodeType)
+      if (d_node.nodeType == jymbo::types::enumDerivativeNodeType_t::kOperator)
       {
-         case jymbo::types::enumDerivativeNodeType_t::kOperator:
-            q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-            q_node.op = d_node.op;
-            break;
-         case jymbo::types::enumDerivativeNodeType_t::kReference:
-            q_node.nodeType = q_tree_in[d_node.qNodeId].nodeType;
-            switch(q_node.nodeType)
-            {
-               case jymbo::types::enumQueryNodeType_t::kOperator:
-                  q_node.op = q_tree_in[d_node.qNodeId].op;
-                  break;
-               case jymbo::types::enumQueryNodeType_t::kSymbol:
-                  q_node.symbol = q_tree_in[d_node.qNodeId].symbol;
-                  break;
-            }
-            break;
-         case jymbo::types::enumDerivativeNodeType_t::kSymbol:
-            q_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-            q_node.symbol = d_node.symbol;
-            break;
+         q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
+         q_node.op = d_node.op;
       }
+      else if (d_node.nodeType == jymbo::types::enumDerivativeNodeType_t::kSymbol)
+      {
+         q_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
+         q_node.symbol = d_node.symbol;
+      }
+
+      // switch(d_node.nodeType)
+      // {
+      //    case jymbo::types::enumDerivativeNodeType_t::kOperator:
+      //       q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
+      //       q_node.op = d_node.op;
+      //       break;
+      //    case jymbo::types::enumDerivativeNodeType_t::kReference:
+      //       q_node.nodeType = q_tree_in[d_node.qNodeId].nodeType;
+      //       switch(q_node.nodeType)
+      //       {
+      //          case jymbo::types::enumQueryNodeType_t::kOperator:
+      //             q_node.op = q_tree_in[d_node.qNodeId].op;
+      //             break;
+      //          case jymbo::types::enumQueryNodeType_t::kSymbol:
+      //             q_node.symbol = q_tree_in[d_node.qNodeId].symbol;
+      //             break;
+      //       }
+      //       break;
+      //    case jymbo::types::enumDerivativeNodeType_t::kSymbol:
+      //       q_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
+      //       q_node.symbol = d_node.symbol;
+      //       break;
+      // }
 
       return q_node;
    }
@@ -194,16 +204,56 @@ namespace derivative_tree
       jymbo::types::QueryTree & q_tree_out
    )
    {
-      std::vector<int> frontier;
+      // The source node IDs belong to the derivative tree.
+      // The destination node IDs belong to the output query tree.
+      std::vector<copyFrontierNode_t> frontier;
       frontier.reserve(d_tree.size() + q_tree_in.size());
 
-      frontier.push_back(d_tree.getRootId());
+      q_tree_out.setRoot(convertDNodeToQNode(d_tree[d_tree.getRootId()]));
+
+      for (int i = 0; i < 2; ++i)
+      {
+         frontier.push_back(
+            {d_tree.getRoot().childNodeIds[i], q_tree_out.getRootId()}
+         );
+      }
 
       while (frontier.size() > 0)
       {
-         const int d_node_id = frontier.back();
+         const copyFrontierNode_t copy_node = frontier.back();
          frontier.pop_back();
 
+         const auto & d_node = d_tree.getNode(copy_node.srcNodeId);
+
+         if (d_node.meta.nodeType == jymbo::types::enumDerivativeNodeType_t::kReference)
+         {
+            // If we've found a reference to q Q node, then this node on the
+            // d-tree is a leaf node, and we don't need to check if it has any
+            // children.
+         }
+         else
+         {
+            const auto temp_q_node = convertDNodeToQNode(d_node.meta);
+            const int new_dest_parent_node_id = q_tree_out.addChild(
+               copy_node.destParentNodeId, temp_q_node
+            );
+
+            const auto & d_tree_node = d_tree.getNode(copy_node.srcNodeId);
+            if (
+               (d_tree_node.childNodeIds[0] != -1) &&
+               (d_tree_node.childNodeIds[1] != -1)
+            )
+            {
+               // Add the children of the d-tree and the destination parent
+               // node as new nodes on the frontier. Node, node, node, node.
+               for (int i = 0 ; i < 2; ++i)
+               {
+                  frontier.push_back(
+                     {d_tree_node.childNodeIds[i], new_dest_parent_node_id}
+                  );
+               }
+            }
+         }
 
       }
    }
