@@ -154,12 +154,58 @@ namespace derivative_tree
       }
    }
 
-   void convertToQTree(
-      const jymbo::types::DerivativeTree & d_tree,
-      jymbo::types::QueryTree & q_tree
+   jymbo::types::queryNode_t convertDNodeToQNode(
+      const jymbo::types::derivativeNode_t d_node,
+      const jymbo::types::QueryTree & q_tree_in
    )
    {
-      
+      jymbo::types::queryNode_t q_node;
+
+      switch(d_node.nodeType)
+      {
+         case jymbo::types::enumDerivativeNodeType_t::kOperator:
+            q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
+            q_node.op = d_node.op;
+            break;
+         case jymbo::types::enumDerivativeNodeType_t::kReference:
+            q_node.nodeType = q_tree_in[d_node.qNodeId].nodeType;
+            switch(q_node.nodeType)
+            {
+               case jymbo::types::enumQueryNodeType_t::kOperator:
+                  q_node.op = q_tree_in[d_node.qNodeId].op;
+                  break;
+               case jymbo::types::enumQueryNodeType_t::kSymbol:
+                  q_node.symbol = q_tree_in[d_node.qNodeId].symbol;
+                  break;
+            }
+            break;
+         case jymbo::types::enumDerivativeNodeType_t::kSymbol:
+            q_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
+            q_node.symbol = d_node.symbol;
+            break;
+      }
+
+      return q_node;
+   }
+
+   void convertToQTree(
+      const jymbo::types::DerivativeTree & d_tree,
+      const jymbo::types::QueryTree & q_tree_in,
+      jymbo::types::QueryTree & q_tree_out
+   )
+   {
+      std::vector<int> frontier;
+      frontier.reserve(d_tree.size() + q_tree_in.size());
+
+      frontier.push_back(d_tree.getRootId());
+
+      while (frontier.size() > 0)
+      {
+         const int d_node_id = frontier.back();
+         frontier.pop_back();
+
+
+      }
    }
 
 }

@@ -31,9 +31,15 @@ namespace derivative_tree
       jymbo::types::DerivativeTree & d_tree
    );
 
+   jymbo::types::queryNode_t convertDNodeToQNode(
+      const jymbo::types::derivativeNode_t d_node,
+      const jymbo::types::QueryTree & q_tree_in
+   );
+
    void convertToQTree(
       const jymbo::types::DerivativeTree & d_tree,
-      jymbo::types::QueryTree & q_tree
+      const jymbo::types::QueryTree & q_tree_in,
+      jymbo::types::QueryTree & q_tree_out
    );
 }
 
