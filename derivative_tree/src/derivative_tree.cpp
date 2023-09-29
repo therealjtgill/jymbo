@@ -261,6 +261,9 @@ namespace derivative_tree
             // If we've found a reference to q Q node, then this node on the
             // d-tree is a leaf node, and we don't need to check if it has any
             // children.
+            const jymbo::types::queryNode_t ref_q_node = q_tree_in[d_node.meta.qNodeId];
+            const int dest_node_id = q_tree_out.addChild(copy_node.destParentNodeId, ref_q_node);
+            copyQTreeToQTree(d_node.meta.qNodeId, dest_node_id, q_tree_in, q_tree_out);
          }
          else
          {
