@@ -153,4 +153,148 @@ namespace derivative_tree
          }
       }
    }
+
+   void copyQTreeToQTree(
+      const int src_node_id,
+      const int dest_node_id,
+      const jymbo::types::QueryTree & src_q_tree,
+      jymbo::types::QueryTree & dest_q_tree
+   )
+   {
+      std::vector<copyFrontierNode_t> frontier;
+      frontier.reserve(src_q_tree.size());
+
+      dest_q_tree[dest_node_id] = src_q_tree[src_node_id];
+
+      {
+         const auto & src_node = src_q_tree.getNode(src_node_id);
+
+         if (
+            (src_node.childNodeIds[0] != -1) &&
+            (src_node.childNodeIds[1] != -1)
+         )
+         {
+            // Have to do it in this order, otherwise the children have their
+            // positions swapped in the output tree.
+            frontier.push_back(
+               {src_node.childNodeIds[1], dest_node_id}
+            );
+            frontier.push_back(
+               {src_node.childNodeIds[0], dest_node_id}
+            );
+         }
+      }
+
+      while (frontier.size() > 0)
+      {
+         const auto transplant = frontier.back();
+         frontier.pop_back();
+
+         const int new_dest_parent_id = dest_q_tree.addChild(
+            transplant.destParentNodeId, src_q_tree[transplant.srcNodeId]
+         );
+
+         const auto & src_node = src_q_tree.getNode(transplant.srcNodeId);
+
+         if (
+            (src_node.childNodeIds[0] != -1) &&
+            (src_node.childNodeIds[1] != -1)
+         )
+         {
+            // Have to do it in this order, otherwise the children have their
+            // positions swapped in the output tree.
+            frontier.push_back(
+               {src_node.childNodeIds[1], new_dest_parent_id}
+            );
+            frontier.push_back(
+               {src_node.childNodeIds[0], new_dest_parent_id}
+            );
+         }
+      }
+   }
+
+   jymbo::types::queryNode_t convertDNodeToQNode(
+      const jymbo::types::derivativeNode_t d_node
+   )
+   {
+      jymbo::types::queryNode_t q_node;
+
+      if (d_node.nodeType == jymbo::types::enumDerivativeNodeType_t::kOperator)
+      {
+         q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
+         q_node.op = d_node.op;
+      }
+      else if (d_node.nodeType == jymbo::types::enumDerivativeNodeType_t::kSymbol)
+      {
+         q_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
+         q_node.symbol = d_node.symbol;
+      }
+
+      return q_node;
+   }
+
+   void convertToQTree(
+      const jymbo::types::DerivativeTree & d_tree,
+      const jymbo::types::QueryTree & q_tree_in,
+      jymbo::types::QueryTree & q_tree_out
+   )
+   {
+      // The source node IDs belong to the derivative tree.
+      // The destination node IDs belong to the output query tree.
+      std::vector<copyFrontierNode_t> frontier;
+      frontier.reserve(d_tree.size() + q_tree_in.size());
+
+      q_tree_out.setRoot(convertDNodeToQNode(d_tree[d_tree.getRootId()]));
+
+      // Have to do it in this order, otherwise the children have their
+      // positions swapped in the output tree.
+      frontier.push_back(
+         {d_tree.getRoot().childNodeIds[1], q_tree_out.getRootId()}
+      );
+      frontier.push_back(
+         {d_tree.getRoot().childNodeIds[0], q_tree_out.getRootId()}
+      );
+
+      while (frontier.size() > 0)
+      {
+         const copyFrontierNode_t copy_node = frontier.back();
+         frontier.pop_back();
+
+         const auto & d_node = d_tree.getNode(copy_node.srcNodeId);
+
+         if (d_node.meta.nodeType == jymbo::types::enumDerivativeNodeType_t::kReference)
+         {
+            // If we've found a reference to q Q node, then this node on the
+            // d-tree is a leaf node, and we don't need to check if it has any
+            // children.
+            const jymbo::types::queryNode_t ref_q_node = q_tree_in[d_node.meta.qNodeId];
+            const int dest_node_id = q_tree_out.addChild(copy_node.destParentNodeId, ref_q_node);
+            copyQTreeToQTree(d_node.meta.qNodeId, dest_node_id, q_tree_in, q_tree_out);
+         }
+         else
+         {
+            const auto temp_q_node = convertDNodeToQNode(d_node.meta);
+            const int new_dest_parent_node_id = q_tree_out.addChild(
+               copy_node.destParentNodeId, temp_q_node
+            );
+
+            const auto & d_tree_node = d_tree.getNode(copy_node.srcNodeId);
+            if (
+               (d_tree_node.childNodeIds[0] != -1) &&
+               (d_tree_node.childNodeIds[1] != -1)
+            )
+            {
+               // Have to do it in this order, otherwise the children have their
+               // positions swapped in the output tree.
+               frontier.push_back(
+                  {d_tree_node.childNodeIds[1], new_dest_parent_node_id}
+               );
+               frontier.push_back(
+                  {d_tree_node.childNodeIds[0], new_dest_parent_node_id}
+               );
+            }
+         }
+      }
+   }
+
 }
