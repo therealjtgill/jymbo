@@ -396,6 +396,33 @@ namespace jymbo
       return d_frontier;
    }
 
+   jymbo::types::derivativeFrontierNodes sineDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+
+   }
+
+   jymbo::types::derivativeFrontierNodes cosineDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+
+   }
+
+   jymbo::types::derivativeFrontierNodes tangentDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+      
+   }
+
    jymbo::types::derivativeFrontierNodes Derivatizer::operator()(
       const int d_node_id,
       const jymbo::types::QueryTree & q_tree,
