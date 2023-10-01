@@ -430,7 +430,7 @@ namespace jymbo
       left_q_ref.nodeType = jymbo::types::enumDerivativeNodeType_t::kReference;
       left_q_ref.qNodeId = q_left_child_id;
 
-      // The right child of the sine operation should be a NULL symbol.
+      // The right child of the sine operation should be a null symbol.
       jymbo::types::derivativeNode_t right_q_ref;
       right_q_ref.nodeType = jymbo::types::enumDerivativeNodeType_t::kReference;
       right_q_ref.qNodeId = q_right_child_id;
@@ -521,7 +521,70 @@ namespace jymbo
       jymbo::types::DerivativeTree & d_tree
    )
    {
+      jymbo::types::derivativeNode_t mult_op;
+      mult_op.nodeType = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      mult_op.op = jymbo::types::enumOperatorType_t::kMultiplication;
 
+      jymbo::types::derivativeNode_t pow_op;
+      pow_op.nodeType = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      pow_op.op = jymbo::types::enumOperatorType_t::kPower;
+
+      jymbo::types::derivativeNode_t cos_op;
+      cos_op.nodeType = jymbo::types::enumDerivativeNodeType_t::kOperator;
+      cos_op.op = jymbo::types::enumOperatorType_t::kCosine;
+
+      jymbo::types::derivativeNode_t neg_2_const;
+      neg_2_const.nodeType = jymbo::types::enumDerivativeNodeType_t::kSymbol;
+      neg_2_const.symbol = jymbo::initializeSymbol(
+         "-2", -2, -2.f, jymbo::types::enumSymbolType_t::kConstant
+      );
+
+      jymbo::types::derivativeNode_t null_sym;
+      null_sym.nodeType = jymbo::types::enumDerivativeNodeType_t::kSymbol;
+      null_sym.symbol = jymbo::initializeSymbol(
+         "null", 0, 0.f, jymbo::types::enumSymbolType_t::kNull
+      );
+
+      if (d_tree[d_node_id].nodeType != jymbo::types::enumDerivativeNodeType_t::kReference)
+      {
+         std::cout << "Derivative tree at node id " << d_node_id << " should reference the q-tree, but it doesn't\n";
+         return {{-1, -1}};
+      }
+
+      const auto & q_node_ref = q_tree.getNode(d_tree[d_node_id].qNodeId);
+
+      const int q_left_child_id = q_node_ref.childNodeIds[0];
+      const int q_right_child_id = q_node_ref.childNodeIds[1];
+
+      if (q_left_child_id == -1 || q_right_child_id == -1)
+      {
+         return {{-1, -1}};
+      }
+
+      jymbo::types::derivativeNode_t left_q_ref;
+      left_q_ref.nodeType = jymbo::types::enumDerivativeNodeType_t::kReference;
+      left_q_ref.qNodeId = q_left_child_id;
+
+      // The right child of the tangent operation should be a null symbol.
+      jymbo::types::derivativeNode_t right_q_ref;
+      right_q_ref.nodeType = jymbo::types::enumDerivativeNodeType_t::kReference;
+      right_q_ref.qNodeId = q_right_child_id;
+
+      d_tree[d_node_id] = mult_op;
+
+      const int pow_op_id = d_tree.addChild(d_node_id, pow_op);
+      const int left_frontier_node_id = d_tree.addChild(d_node_id, left_q_ref);
+
+      const int cos_op_id = d_tree.addChild(pow_op_id, cos_op);
+      d_tree.addChild(cos_op_id, left_q_ref);
+      d_tree.addChild(cos_op_id, null_sym);
+
+      jymbo::types::derivativeFrontierNodes d_frontier = {
+         left_frontier_node_id,
+         -1
+      };
+
+      return d_frontier;
    }
 
    jymbo::types::derivativeFrontierNodes Derivatizer::operator()(
