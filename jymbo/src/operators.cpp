@@ -539,12 +539,6 @@ namespace jymbo
          "-2", -2, -2.f, jymbo::types::enumSymbolType_t::kConstant
       );
 
-      jymbo::types::derivativeNode_t null_sym;
-      null_sym.nodeType = jymbo::types::enumDerivativeNodeType_t::kSymbol;
-      null_sym.symbol = jymbo::initializeSymbol(
-         "null", 0, 0.f, jymbo::types::enumSymbolType_t::kNull
-      );
-
       if (d_tree[d_node_id].nodeType != jymbo::types::enumDerivativeNodeType_t::kReference)
       {
          std::cout << "Derivative tree at node id " << d_node_id << " should reference the q-tree, but it doesn't\n";
@@ -579,7 +573,7 @@ namespace jymbo
       d_tree.addChild(pow_op_id, neg_2_const);
 
       d_tree.addChild(cos_op_id, left_q_ref);
-      d_tree.addChild(cos_op_id, null_sym);
+      d_tree.addChild(cos_op_id, right_q_ref);
 
       jymbo::types::derivativeFrontierNodes d_frontier = {
          left_frontier_node_id,
