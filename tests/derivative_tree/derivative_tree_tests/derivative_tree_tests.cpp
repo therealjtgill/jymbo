@@ -156,3 +156,56 @@ TEST_CASE( "take derivative of quadratic equation", "[DerivativeTree]" )
    std::cout << "givin you the parsed d tree\n";
    query_tree::print(derivative_of_q_tree);
 }
+
+TEST_CASE( "take derivative of sine", "[DerivativeTree]" )
+{
+   jymbo::types::queryNode_t q_node;
+   q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
+   q_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::QueryTree q_tree(q_node);
+
+   jymbo::types::queryNode_t q_y_node;
+   q_y_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
+   q_y_node.symbol = jymbo::initializeSymbol(
+      "y", 0, 0.f, jymbo::types::enumSymbolType_t::kDependent
+   );
+
+   jymbo::types::queryNode_t sin_op;
+   sin_op.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
+   sin_op.op = jymbo::types::enumOperatorType_t::kSine;
+
+   q_tree.addChild(q_tree.getRootId(), q_y_node);
+   const int sin_op_id = q_tree.addChild(q_tree.getRootId(), sin_op);
+
+   jymbo::types::queryNode_t x_sym_node;
+   x_sym_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
+   x_sym_node.symbol = jymbo::initializeSymbol(
+      "x", 1, 0.f, jymbo::types::enumSymbolType_t::kIndependent
+   );
+
+   jymbo::types::queryNode_t null_sym;
+   null_sym.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
+   null_sym.symbol = jymbo::initializeSymbol(
+      "null", 0, 0.f, jymbo::types::enumSymbolType_t::kNull
+   );
+
+   q_tree.addChild(sin_op_id, x_sym_node);
+   q_tree.addChild(sin_op_id, null_sym);
+
+   std::cout << "\na triggy boi\n";
+   query_tree::print(q_tree);
+
+   jymbo::types::derivativeNode_t d_node;
+   d_node.nodeType = jymbo::types::enumDerivativeNodeType_t::kOperator;
+   d_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::DerivativeTree d_tree(d_node);
+
+   derivative_tree::derivatize(q_tree, d_tree);
+
+   jymbo::types::QueryTree derivative_of_q_tree(q_node);
+
+   derivative_tree::convertToQTree(d_tree, q_tree, derivative_of_q_tree);
+
+   std::cout << "givin you the parsed d tree\n";
+   query_tree::print(derivative_of_q_tree);
+}
