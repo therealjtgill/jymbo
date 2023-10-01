@@ -89,7 +89,10 @@ namespace jymbo
             {jymbo::types::enumOperatorType_t::kSubtraction, subtractionDerivativeSubtree},
             {jymbo::types::enumOperatorType_t::kMultiplication, multiplicationDerivativeSubtree},
             {jymbo::types::enumOperatorType_t::kDivision, divisionDerivativeSubtree},
-            {jymbo::types::enumOperatorType_t::kPower, powerDerivativeSubtree}
+            {jymbo::types::enumOperatorType_t::kPower, powerDerivativeSubtree},
+            {jymbo::types::enumOperatorType_t::kSine, sineDerivativeSubtree},
+            {jymbo::types::enumOperatorType_t::kCosine, cosineDerivativeSubtree},
+            {jymbo::types::enumOperatorType_t::kTangent, tangentDerivativeSubtree}
          };
    };
 }
