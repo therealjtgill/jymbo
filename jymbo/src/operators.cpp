@@ -576,6 +576,8 @@ namespace jymbo
       const int left_frontier_node_id = d_tree.addChild(d_node_id, left_q_ref);
 
       const int cos_op_id = d_tree.addChild(pow_op_id, cos_op);
+      d_tree.addChild(pow_op_id, neg_2_const);
+
       d_tree.addChild(cos_op_id, left_q_ref);
       d_tree.addChild(cos_op_id, null_sym);
 
