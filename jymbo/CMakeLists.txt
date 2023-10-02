@@ -1,5 +1,6 @@
 set(
    headers
+   include/derivative_node.hpp
    include/derivative_tree.hpp
    include/jymbo_types.hpp
    include/operators.hpp
@@ -10,6 +11,7 @@ set(
 
 set(
    sources
+   src/derivative_node.cpp
    src/derivative_tree.cpp
    src/operators.cpp
    src/query_node.cpp
