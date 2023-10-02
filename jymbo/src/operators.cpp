@@ -569,10 +569,6 @@ namespace jymbo
          jymbo::types::enumOperatorType_t::kPower
       );
 
-      jymbo::types::derivativeNode_t ln_op = jymbo::initializeOperatorDerivativeNode(
-         jymbo::types::enumOperatorType_t::kNaturalLog
-      );
-
       if (d_tree[d_node_id].nodeType != jymbo::types::enumDerivativeNodeType_t::kReference)
       {
          std::cout << "Derivative tree at node id " << d_node_id << " should reference the q-tree, but it doesn't\n";
@@ -591,9 +587,6 @@ namespace jymbo
 
       jymbo::types::derivativeNode_t left_q_ref = \
          jymbo::initializeReferenceDerivativeNode(q_left_child_id);
-
-      jymbo::types::derivativeNode_t right_q_ref = \
-         jymbo::initializeReferenceDerivativeNode(q_right_child_id);
 
       d_tree[d_node_id] = mult_op;
 
