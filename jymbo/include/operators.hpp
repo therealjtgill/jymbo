@@ -65,6 +65,18 @@ namespace jymbo
       jymbo::types::DerivativeTree & d_tree
    );
 
+   jymbo::types::derivativeFrontierNodes naturalLogDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   );
+
+   jymbo::types::derivativeFrontierNodes naturalExponentDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   );
+
    class Derivatizer
    {
       public:
