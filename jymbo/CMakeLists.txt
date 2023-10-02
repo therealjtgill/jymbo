@@ -3,6 +3,7 @@ set(
    include/derivative_tree.hpp
    include/jymbo_types.hpp
    include/operators.hpp
+   include/query_node.hpp
    include/query_tree.hpp
    include/symbols.hpp
 )
@@ -11,6 +12,7 @@ set(
    sources
    src/derivative_tree.cpp
    src/operators.cpp
+   src/query_node.cpp
    src/query_tree.cpp
    src/symbols.cpp
 )

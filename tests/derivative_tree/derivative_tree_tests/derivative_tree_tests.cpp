@@ -1,6 +1,7 @@
 #include "jymbo_types.hpp"
 #include "derivative_tree.hpp"
 #include "polynomial_query_tree.hpp"
+#include "query_node.hpp"
 #include "query_tree.hpp"
 #include "symbols.hpp"
 
@@ -52,30 +53,25 @@ TEST_CASE( "print derivative tree", "[DerivativeTree]" )
 
 TEST_CASE( "take derivative of multiplication", "[DerivativeTree]" )
 {
-   jymbo::types::queryNode_t q_node;
-   q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-   q_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::queryNode_t q_node = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kEqual
+   );
+
    jymbo::types::QueryTree q_tree(q_node);
 
-   jymbo::types::queryNode_t q_y_node;
-   q_y_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   q_y_node.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t q_y_node = jymbo::initializeSymbolQueryNode(
       "y", 0, 0.f, jymbo::types::enumSymbolType_t::kDependent
    );
 
-   jymbo::types::queryNode_t mult_op;
-   mult_op.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-   mult_op.op = jymbo::types::enumOperatorType_t::kMultiplication;
+   jymbo::types::queryNode_t mult_op = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kMultiplication
+   );
 
-   jymbo::types::queryNode_t q_x_node;
-   q_x_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   q_x_node.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t q_x_node = jymbo::initializeSymbolQueryNode(
       "x", 0, 0.f, jymbo::types::enumSymbolType_t::kIndependent
    );
 
-   jymbo::types::queryNode_t q_a_node;
-   q_a_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   q_a_node.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t q_a_node = jymbo::initializeSymbolQueryNode(
       "a", 0, 0.f, jymbo::types::enumSymbolType_t::kParameter
    );
 
@@ -99,9 +95,10 @@ TEST_CASE( "take derivative of multiplication", "[DerivativeTree]" )
 
 TEST_CASE( "take derivative of linear equation", "[DerivativeTree]" )
 {
-   jymbo::types::queryNode_t q_node;
-   q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-   q_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::queryNode_t q_node = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kEqual
+   );
+
    jymbo::types::QueryTree q_tree(q_node);
 
    test_utils::polynomialQueryTree(1, q_tree);
@@ -130,9 +127,10 @@ TEST_CASE( "take derivative of linear equation", "[DerivativeTree]" )
 
 TEST_CASE( "take derivative of quadratic equation", "[DerivativeTree]" )
 {
-   jymbo::types::queryNode_t q_node;
-   q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-   q_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::queryNode_t q_node = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kEqual
+   );
+
    jymbo::types::QueryTree q_tree(q_node);
 
    test_utils::polynomialQueryTree(2, q_tree);
@@ -159,33 +157,28 @@ TEST_CASE( "take derivative of quadratic equation", "[DerivativeTree]" )
 
 TEST_CASE( "take derivative of sine", "[DerivativeTree]" )
 {
-   jymbo::types::queryNode_t q_node;
-   q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-   q_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::queryNode_t q_node = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kEqual
+   );
+
    jymbo::types::QueryTree q_tree(q_node);
 
-   jymbo::types::queryNode_t q_y_node;
-   q_y_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   q_y_node.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t q_y_node = jymbo::initializeSymbolQueryNode(
       "y", 0, 0.f, jymbo::types::enumSymbolType_t::kDependent
    );
 
-   jymbo::types::queryNode_t sin_op;
-   sin_op.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-   sin_op.op = jymbo::types::enumOperatorType_t::kSine;
+   jymbo::types::queryNode_t sin_op = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kSine
+   );
 
    q_tree.addChild(q_tree.getRootId(), q_y_node);
    const int sin_op_id = q_tree.addChild(q_tree.getRootId(), sin_op);
 
-   jymbo::types::queryNode_t x_sym_node;
-   x_sym_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   x_sym_node.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t x_sym_node = jymbo::initializeSymbolQueryNode(
       "x", 1, 0.f, jymbo::types::enumSymbolType_t::kIndependent
    );
 
-   jymbo::types::queryNode_t null_sym;
-   null_sym.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   null_sym.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t null_sym = jymbo::initializeSymbolQueryNode(
       "null", 0, 0.f, jymbo::types::enumSymbolType_t::kNull
    );
 
@@ -212,33 +205,28 @@ TEST_CASE( "take derivative of sine", "[DerivativeTree]" )
 
 TEST_CASE( "take derivative of cosine", "[DerivativeTree]" )
 {
-   jymbo::types::queryNode_t q_node;
-   q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-   q_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::queryNode_t q_node = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kEqual
+   );
+
    jymbo::types::QueryTree q_tree(q_node);
 
-   jymbo::types::queryNode_t q_y_node;
-   q_y_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   q_y_node.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t q_y_node = jymbo::initializeSymbolQueryNode(
       "y", 0, 0.f, jymbo::types::enumSymbolType_t::kDependent
    );
 
-   jymbo::types::queryNode_t cos_op;
-   cos_op.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-   cos_op.op = jymbo::types::enumOperatorType_t::kCosine;
+   jymbo::types::queryNode_t cos_op = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kCosine
+   );
 
    q_tree.addChild(q_tree.getRootId(), q_y_node);
    const int cos_op_id = q_tree.addChild(q_tree.getRootId(), cos_op);
 
-   jymbo::types::queryNode_t x_sym_node;
-   x_sym_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   x_sym_node.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t x_sym_node = jymbo::initializeSymbolQueryNode(
       "x", 1, 0.f, jymbo::types::enumSymbolType_t::kIndependent
    );
 
-   jymbo::types::queryNode_t null_sym;
-   null_sym.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   null_sym.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t null_sym = jymbo::initializeSymbolQueryNode(
       "null", 0, 0.f, jymbo::types::enumSymbolType_t::kNull
    );
 
@@ -265,33 +253,28 @@ TEST_CASE( "take derivative of cosine", "[DerivativeTree]" )
 
 TEST_CASE( "take derivative of tangent", "[DerivativeTree]" )
 {
-   jymbo::types::queryNode_t q_node;
-   q_node.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-   q_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::queryNode_t q_node = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kEqual
+   );
+
    jymbo::types::QueryTree q_tree(q_node);
 
-   jymbo::types::queryNode_t q_y_node;
-   q_y_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   q_y_node.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t q_y_node = jymbo::initializeSymbolQueryNode(
       "y", 0, 0.f, jymbo::types::enumSymbolType_t::kDependent
    );
 
-   jymbo::types::queryNode_t tan_op;
-   tan_op.nodeType = jymbo::types::enumQueryNodeType_t::kOperator;
-   tan_op.op = jymbo::types::enumOperatorType_t::kTangent;
+   jymbo::types::queryNode_t tan_op = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kTangent
+   );
 
    q_tree.addChild(q_tree.getRootId(), q_y_node);
    const int tan_op_id = q_tree.addChild(q_tree.getRootId(), tan_op);
 
-   jymbo::types::queryNode_t x_sym_node;
-   x_sym_node.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   x_sym_node.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t x_sym_node = jymbo::initializeSymbolQueryNode(
       "x", 1, 0.f, jymbo::types::enumSymbolType_t::kIndependent
    );
 
-   jymbo::types::queryNode_t null_sym;
-   null_sym.nodeType = jymbo::types::enumQueryNodeType_t::kSymbol;
-   null_sym.symbol = jymbo::initializeSymbol(
+   jymbo::types::queryNode_t null_sym = jymbo::initializeSymbolQueryNode(
       "null", 0, 0.f, jymbo::types::enumSymbolType_t::kNull
    );
 
