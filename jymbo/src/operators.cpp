@@ -331,6 +331,14 @@ namespace jymbo
          jymbo::types::enumOperatorType_t::kPower
       );
 
+      jymbo::types::derivativeNode_t ln_op = jymbo::initializeOperatorDerivativeNode(
+         jymbo::types::enumOperatorType_t::kNaturalLog
+      );
+
+      jymbo::types::derivativeNode_t add_op = jymbo::initializeOperatorDerivativeNode(
+         jymbo::types::enumOperatorType_t::kAddition
+      );
+
       if (d_tree[d_node_id].nodeType != jymbo::types::enumDerivativeNodeType_t::kReference)
       {
          std::cout << "Derivative tree at node id " << d_node_id << " should reference the q-tree, but it doesn't\n";
@@ -353,13 +361,33 @@ namespace jymbo
       jymbo::types::derivativeNode_t right_q_ref = \
          jymbo::initializeReferenceDerivativeNode(q_right_child_id);
 
-      d_tree[d_node_id] = mult_op;
+      d_tree[d_node_id] = add_op;
 
-      const int left_mult_node_id = d_tree.addChild(d_node_id, mult_op);
-      const int left_frontier_node_id = d_tree.addChild(d_node_id, left_q_ref);
+      const int top_left_mult_id = d_tree.addChild(d_node_id, mult_op);
+      const int top_right_mult_id = d_tree.addChild(d_node_id, mult_op);
 
-      d_tree.addChild(left_mult_node_id, right_q_ref);
-      const int pow_node_id = d_tree.addChild(left_mult_node_id, pow_op);
+      const int right_frontier_node_id = d_tree.addChild(top_left_mult_id, right_q_ref);
+      const int left_left_mult_id = d_tree.addChild(top_left_mult_id, mult_op);
+
+      const int pow_id = d_tree.addChild(left_left_mult_id, pow_op);
+      const int ln_id = d_tree.addChild(left_left_mult_id, ln_op);
+
+      d_tree.addChild(pow_id, left_q_ref);
+      d_tree.addChild(pow_id, right_q_ref);
+
+      const jymbo::types::derivativeNode_t null_sym = \
+         jymbo::initializeSymbolDerivativeNode(
+            "null", -1, -1.f, jymbo::types::enumSymbolType_t::kNull
+         );
+
+      d_tree.addChild(ln_id, left_q_ref);
+      d_tree.addChild(ln_id, null_sym);
+
+      const int right_left_mult_id = d_tree.addChild(top_right_mult_id, mult_op);
+      const int left_frontier_node_id = d_tree.addChild(top_right_mult_id, left_q_ref);
+
+      d_tree.addChild(right_left_mult_id, right_q_ref);
+      const int pow_node_id = d_tree.addChild(right_left_mult_id, pow_op);
 
       d_tree.addChild(pow_node_id, left_q_ref);
       const int subtract_node_id = d_tree.addChild(pow_node_id, subtract_op);
@@ -373,8 +401,8 @@ namespace jymbo
 
       jymbo::types::derivativeFrontierNodes d_frontier = {
          {
-            left_frontier_node_id,
-            -1
+            right_frontier_node_id,
+            left_frontier_node_id
          }
       };
 
