@@ -555,6 +555,113 @@ namespace jymbo
       return d_frontier;
    }
 
+   jymbo::types::derivativeFrontierNodes naturalLogDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+      jymbo::types::derivativeNode_t mult_op = jymbo::initializeOperatorDerivativeNode(
+         jymbo::types::enumOperatorType_t::kMultiplication
+      );
+
+      jymbo::types::derivativeNode_t pow_op = jymbo::initializeOperatorDerivativeNode(
+         jymbo::types::enumOperatorType_t::kPower
+      );
+
+      if (d_tree[d_node_id].nodeType != jymbo::types::enumDerivativeNodeType_t::kReference)
+      {
+         std::cout << "Derivative tree at node id " << d_node_id << " should reference the q-tree, but it doesn't\n";
+         return {{-1, -1}};
+      }
+
+      const auto & q_node_ref = q_tree.getNode(d_tree[d_node_id].qNodeId);
+
+      const int q_left_child_id = q_node_ref.childNodeIds[0];
+      const int q_right_child_id = q_node_ref.childNodeIds[1];
+
+      if (q_left_child_id == -1 || q_right_child_id == -1)
+      {
+         return {{-1, -1}};
+      }
+
+      jymbo::types::derivativeNode_t left_q_ref = \
+         jymbo::initializeReferenceDerivativeNode(q_left_child_id);
+
+      d_tree[d_node_id] = mult_op;
+
+      const int pow_op_id = d_tree.addChild(d_node_id, pow_op);
+      const int left_frontier_node_id = d_tree.addChild(d_node_id, left_q_ref);
+
+      jymbo::types::derivativeNode_t neg_1_const = \
+         jymbo::initializeSymbolDerivativeNode(
+            "-1", -1, -1.f, jymbo::types::enumSymbolType_t::kConstant
+         );
+
+      d_tree.addChild(pow_op_id, left_q_ref);
+      d_tree.addChild(pow_op_id, neg_1_const);
+
+      jymbo::types::derivativeFrontierNodes d_frontier = {
+         left_frontier_node_id,
+         -1
+      };
+
+      return d_frontier;
+   }
+
+   jymbo::types::derivativeFrontierNodes naturalExponentDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   )
+   {
+      jymbo::types::derivativeNode_t mult_op = jymbo::initializeOperatorDerivativeNode(
+         jymbo::types::enumOperatorType_t::kMultiplication
+      );
+
+      jymbo::types::derivativeNode_t exp_op = jymbo::initializeOperatorDerivativeNode(
+         jymbo::types::enumOperatorType_t::kNaturalExponent
+      );
+
+      if (d_tree[d_node_id].nodeType != jymbo::types::enumDerivativeNodeType_t::kReference)
+      {
+         std::cout << "Derivative tree at node id " << d_node_id << " should reference the q-tree, but it doesn't\n";
+         return {{-1, -1}};
+      }
+
+      const auto & q_node_ref = q_tree.getNode(d_tree[d_node_id].qNodeId);
+
+      const int q_left_child_id = q_node_ref.childNodeIds[0];
+      const int q_right_child_id = q_node_ref.childNodeIds[1];
+
+      if (q_left_child_id == -1 || q_right_child_id == -1)
+      {
+         return {{-1, -1}};
+      }
+
+      jymbo::types::derivativeNode_t left_q_ref = \
+         jymbo::initializeReferenceDerivativeNode(q_left_child_id);
+
+      jymbo::types::derivativeNode_t right_q_ref = \
+         jymbo::initializeReferenceDerivativeNode(q_right_child_id);
+
+      d_tree[d_node_id] = mult_op;
+
+      // Assumes that the right Q tree reference is null
+      const int exp_id = d_tree.addChild(d_node_id, exp_op);
+      const int left_frontier_node_id = d_tree.addChild(d_node_id, left_q_ref);
+
+      d_tree.addChild(exp_id, left_q_ref);
+      d_tree.addChild(exp_id, right_q_ref);
+
+      jymbo::types::derivativeFrontierNodes d_frontier = {
+         left_frontier_node_id,
+         -1
+      };
+
+      return d_frontier;
+   }
+
    jymbo::types::derivativeFrontierNodes Derivatizer::operator()(
       const int d_node_id,
       const jymbo::types::QueryTree & q_tree,

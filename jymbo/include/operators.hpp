@@ -65,6 +65,18 @@ namespace jymbo
       jymbo::types::DerivativeTree & d_tree
    );
 
+   jymbo::types::derivativeFrontierNodes naturalLogDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   );
+
+   jymbo::types::derivativeFrontierNodes naturalExponentDerivativeSubtree(
+      const int d_node_id,
+      const jymbo::types::QueryTree & q_tree,
+      jymbo::types::DerivativeTree & d_tree
+   );
+
    class Derivatizer
    {
       public:
@@ -92,7 +104,9 @@ namespace jymbo
             {jymbo::types::enumOperatorType_t::kPower, powerDerivativeSubtree},
             {jymbo::types::enumOperatorType_t::kSine, sineDerivativeSubtree},
             {jymbo::types::enumOperatorType_t::kCosine, cosineDerivativeSubtree},
-            {jymbo::types::enumOperatorType_t::kTangent, tangentDerivativeSubtree}
+            {jymbo::types::enumOperatorType_t::kTangent, tangentDerivativeSubtree},
+            {jymbo::types::enumOperatorType_t::kNaturalExponent, naturalExponentDerivativeSubtree},
+            {jymbo::types::enumOperatorType_t::kNaturalLog, naturalLogDerivativeSubtree}
          };
    };
 }

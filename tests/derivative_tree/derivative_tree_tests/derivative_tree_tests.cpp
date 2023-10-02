@@ -298,3 +298,99 @@ TEST_CASE( "take derivative of tangent", "[DerivativeTree]" )
    std::cout << "givin you the parsed d tree\n";
    query_tree::print(derivative_of_q_tree);
 }
+
+TEST_CASE( "take derivative of natural log", "[DerivativeTree]" )
+{
+   jymbo::types::queryNode_t q_node = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kEqual
+   );
+
+   jymbo::types::QueryTree q_tree(q_node);
+
+   jymbo::types::queryNode_t q_y_node = jymbo::initializeSymbolQueryNode(
+      "y", 0, 0.f, jymbo::types::enumSymbolType_t::kDependent
+   );
+
+   jymbo::types::queryNode_t ln_op = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kNaturalLog
+   );
+
+   q_tree.addChild(q_tree.getRootId(), q_y_node);
+   const int ln_op_id = q_tree.addChild(q_tree.getRootId(), ln_op);
+
+   jymbo::types::queryNode_t x_sym_node = jymbo::initializeSymbolQueryNode(
+      "x", 1, 0.f, jymbo::types::enumSymbolType_t::kIndependent
+   );
+
+   jymbo::types::queryNode_t null_sym = jymbo::initializeSymbolQueryNode(
+      "null", 0, 0.f, jymbo::types::enumSymbolType_t::kNull
+   );
+
+   q_tree.addChild(ln_op_id, x_sym_node);
+   q_tree.addChild(ln_op_id, null_sym);
+
+   std::cout << "\na triggy boi\n";
+   query_tree::print(q_tree);
+
+   jymbo::types::derivativeNode_t d_node;
+   d_node.nodeType = jymbo::types::enumDerivativeNodeType_t::kOperator;
+   d_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::DerivativeTree d_tree(d_node);
+
+   derivative_tree::derivatize(q_tree, d_tree);
+
+   jymbo::types::QueryTree derivative_of_q_tree(q_node);
+
+   derivative_tree::convertToQTree(d_tree, q_tree, derivative_of_q_tree);
+
+   std::cout << "givin you the parsed d tree\n";
+   query_tree::print(derivative_of_q_tree);
+}
+
+TEST_CASE( "take derivative of natural exponent", "[DerivativeTree]" )
+{
+   jymbo::types::queryNode_t q_node = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kEqual
+   );
+
+   jymbo::types::QueryTree q_tree(q_node);
+
+   jymbo::types::queryNode_t q_y_node = jymbo::initializeSymbolQueryNode(
+      "y", 0, 0.f, jymbo::types::enumSymbolType_t::kDependent
+   );
+
+   jymbo::types::queryNode_t exp_op = jymbo::initializeOperatorQueryNode(
+      jymbo::types::enumOperatorType_t::kNaturalExponent
+   );
+
+   q_tree.addChild(q_tree.getRootId(), q_y_node);
+   const int exp_op_id = q_tree.addChild(q_tree.getRootId(), exp_op);
+
+   jymbo::types::queryNode_t x_sym_node = jymbo::initializeSymbolQueryNode(
+      "x", 1, 0.f, jymbo::types::enumSymbolType_t::kIndependent
+   );
+
+   jymbo::types::queryNode_t null_sym = jymbo::initializeSymbolQueryNode(
+      "null", 0, 0.f, jymbo::types::enumSymbolType_t::kNull
+   );
+
+   q_tree.addChild(exp_op_id, x_sym_node);
+   q_tree.addChild(exp_op_id, null_sym);
+
+   std::cout << "\na triggy boi\n";
+   query_tree::print(q_tree);
+
+   jymbo::types::derivativeNode_t d_node;
+   d_node.nodeType = jymbo::types::enumDerivativeNodeType_t::kOperator;
+   d_node.op = jymbo::types::enumOperatorType_t::kEqual;
+   jymbo::types::DerivativeTree d_tree(d_node);
+
+   derivative_tree::derivatize(q_tree, d_tree);
+
+   jymbo::types::QueryTree derivative_of_q_tree(q_node);
+
+   derivative_tree::convertToQTree(d_tree, q_tree, derivative_of_q_tree);
+
+   std::cout << "givin you the parsed d tree\n";
+   query_tree::print(derivative_of_q_tree);
+}
