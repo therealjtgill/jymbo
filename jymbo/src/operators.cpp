@@ -361,8 +361,6 @@ namespace jymbo
       jymbo::types::derivativeNode_t right_q_ref = \
          jymbo::initializeReferenceDerivativeNode(q_right_child_id);
 
-      // d_tree[d_node_id] = mult_op;
-
       d_tree[d_node_id] = add_op;
 
       const int top_left_mult_id = d_tree.addChild(d_node_id, mult_op);
@@ -403,8 +401,8 @@ namespace jymbo
 
       jymbo::types::derivativeFrontierNodes d_frontier = {
          {
-            left_frontier_node_id,
-            -1
+            right_frontier_node_id,
+            left_frontier_node_id
          }
       };
 
